@@ -3,10 +3,12 @@ package poker.manager.api.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import poker.manager.api.domain.Usuario;
+import poker.manager.api.domain.UsuarioPartida;
 import poker.manager.api.domain.enums.PartidaStatus;
 import poker.manager.api.dto.PartidaDTO;
 import poker.manager.api.dto.UsuarioDTO;
 import poker.manager.api.repository.PartidaRepository;
+import poker.manager.api.repository.UsuarioPartidaRepository;
 import poker.manager.api.repository.UsuarioRepository;
 import poker.manager.api.domain.Partida;
 
@@ -23,29 +25,36 @@ public class PartidaService {
     private UsuarioPartidaService usuarioPartidaService;
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioPartidaRepository usuarioPartidaRepository;
 
 
-    public Partida buscarPartida(Integer id) {
+
+    public PartidaDTO buscarPartida(Integer id) {
         Optional<Partida> partida = partidaRepository.findById(id);
-        return partida.get();
+        Optional<PartidaDTO> partidaBUscada = partida.map(PartidaDTO::new);
+        return partidaBUscada.get();
+
     }
 
-    public Partida criarPartida(PartidaDTO partidaDTO) {
-        Partida partidaNova = new Partida();
-        partidaNova.setData(partidaDTO.data());
-        partidaNova.setStatus(PartidaStatus.AGUARDANDO_ANFITRIAO);
-        partidaRepository.save(partidaNova);
-        return partidaNova;
+    public PartidaDTO criarPartida(PartidaDTO partidaDTO) {
+        Partida partidaNova = new Partida(partidaDTO.id(),null,null,
+                partidaDTO.data(),partidaDTO.status());
+        partidaNova =  partidaRepository.save(partidaNova);
+        return partidaDTO;
     }
 
-    public Partida cadastrarAnfitriao(UsuarioDTO anfitriaoDTO, PartidaDTO partidaDTO) {
+    public PartidaDTO cadastrarAnfitriao(PartidaDTO partidaDTO, UsuarioDTO anfitriaoDTO) {
         Partida partida = partidaRepository.getReferenceById(partidaDTO.id());
+        Usuario anfitriao = usuarioRepository.getReferenceById(partidaDTO.usuarioAnfitriaoId());
         partida.setUsuarioAnfitriaoId(partidaDTO.usuarioAnfitriaoId());
         partida.setStatus(PartidaStatus.ABERTA);
         partida.setQuantidadeJogadores(partidaDTO.quantidadeJogadores());
-        usuarioPartidaService.confirmarPresenca(partidaDTO, anfitriaoDTO);
+        UsuarioPartida usuarioPartida = usuarioPartidaService.confirmarPresenca(partidaDTO, anfitriaoDTO);
+        usuarioPartidaRepository.save(usuarioPartida);
         partidaRepository.save(partida);
-        return partida;
+        usuarioRepository.save(anfitriao);
+        return partidaDTO;
     }
 
     public void anfitriaoCancelado(PartidaDTO partidaDTO) {

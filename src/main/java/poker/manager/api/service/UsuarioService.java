@@ -1,10 +1,13 @@
 package poker.manager.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import poker.manager.api.domain.Usuario;
 import poker.manager.api.dto.NovoUsuarioDTO;
+import poker.manager.api.dto.UsuarioAtualizadoDTO;
 import poker.manager.api.dto.UsuarioDTO;
 import poker.manager.api.repository.UsuarioRepository;
 
@@ -21,42 +24,34 @@ public class UsuarioService {
 
 
     public Usuario buscarUsuario(Integer id){
-        Optional<Usuario> users = usuarioRepository.findById(id);
-        return users.get();
+        Optional<Usuario> user = usuarioRepository.findById(id);
+        return user.get();
     }
 
 
-    public Usuario inserirNovoUsuario(Usuario user){
-        user = usuarioRepository.save(user);
-        return user;
+    public Usuario inserirNovoUsuario(Usuario usuario){
+        usuario = usuarioRepository.save(usuario);
+        return usuario;
     }
 
-    public Usuario atualizarUsuario(Integer id, Usuario newUser){
-        Usuario Olduser = usuarioRepository.getReferenceById(id);
-        atualizarDados(Olduser, newUser);
-        return usuarioRepository.save(newUser);
+    public Usuario atualizarUsuario(Usuario oldUser){
+        Usuario NewUser = usuarioRepository.getReferenceById(oldUser.getId());
+        atualizarDados(NewUser, oldUser);
+        usuarioRepository.save(NewUser);
+        return NewUser;
     }
 
-    public void atualizarDados(Usuario newUser, Usuario oldUser){
-        newUser.setId(newUser.getId());
-        newUser.setNome(oldUser.getNome());
-        newUser.setEndereco(oldUser.getEndereco());
-        newUser.setChavePix(oldUser.getChavePix());
-        newUser.setPassword(oldUser.getPassword());
-        newUser.setUsername(oldUser.getUsername());
+    public void atualizarDados(Usuario oldUser,Usuario newUser){
+        oldUser.setNome(newUser.getNome());
+        oldUser.setUsername(newUser.getUsername());
+        oldUser.setPassword(encoder.encode(newUser.getPassword()));
+        oldUser.setChavePix(newUser.getChavePix());
+        oldUser.setEndereco(newUser.getEndereco());
     }
 
-    public List<Usuario> findAll() {
-        return usuarioRepository.findAllByIsEnabledTrue();
+    public Page<Usuario> findAll(Pageable pageable) {
+        return usuarioRepository.findAllByIsEnabledTrue(pageable);
     }
 
-    public Usuario fromDTO(UsuarioDTO usuarioDTO) {
-        return new Usuario(usuarioDTO.id(), usuarioDTO.nome(), usuarioDTO.username(),null , usuarioDTO.chavePix(), usuarioDTO.endereco(),usuarioDTO.role(),usuarioDTO.isEnabled(),usuarioDTO.partidas());
-    }
-
-    public Usuario fromNewDTO(NovoUsuarioDTO newUserDto) {
-        return new Usuario(newUserDto.id(), newUserDto.nome(), newUserDto.username(), encoder.encode(newUserDto.password()), newUserDto.chavePix(),
-                newUserDto.endereco(),newUserDto.role(),newUserDto.isEnabled(),null);
-    }
 
 }

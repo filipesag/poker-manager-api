@@ -20,8 +20,6 @@ public class AuthenticationService {
     private JwtService jwtService;
 
 
-
-
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         manager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getUsername(),

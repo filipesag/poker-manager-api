@@ -2,8 +2,7 @@ package poker.manager.api.dto;
 
 
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 import poker.manager.api.domain.Usuario;
@@ -11,7 +10,9 @@ import poker.manager.api.domain.UsuarioPartida;
 import poker.manager.api.domain.enums.Permissao;
 import java.util.Set;
 
-public record NovoUsuarioDTO(Integer id,
+public record NovoUsuarioDTO(
+
+        Integer id,
         @NotEmpty
         @Length(min = 10, max = 30, message = "Nome deve possuir entre 10 a 30 caracters.")
         String nome,

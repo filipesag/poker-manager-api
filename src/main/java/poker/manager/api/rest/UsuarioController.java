@@ -2,11 +2,15 @@ package poker.manager.api.rest;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import poker.manager.api.domain.Usuario;
 import poker.manager.api.dto.NovoUsuarioDTO;
+import poker.manager.api.dto.UsuarioAtualizadoDTO;
 import poker.manager.api.dto.UsuarioDTO;
 import poker.manager.api.service.UsuarioService;
 import java.net.URI;
@@ -21,31 +25,30 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @GetMapping(value = "find/{id}")
-    public ResponseEntity<Usuario> buscarUsuario(@PathVariable Integer id) {
+    public ResponseEntity<UsuarioDTO> buscarUsuario(@PathVariable Integer id) {
         Usuario user =  usuarioService.buscarUsuario(id);
-        return ResponseEntity.ok().body(user);
+        UsuarioDTO usuarioDTO = new UsuarioDTO(user);
+        return ResponseEntity.ok().body(usuarioDTO);
     }
 
     @GetMapping(value = "/find/all")
-    public ResponseEntity<List<Usuario>> findAllEnabled() {
-        List<UsuarioDTO> users = usuarioService.findAll().stream().map(UsuarioDTO::new).toList();
-        List<Usuario> listDto = users.stream().map(x -> new Usuario()).toList();
-        return ResponseEntity.ok().body(listDto);
+    public Page<UsuarioDTO> findAllEnabled(@PageableDefault(size = 10, sort = {"nome"}) Pageable pageable) {
+        Page<UsuarioDTO> listDto = usuarioService.findAll(pageable).map(UsuarioDTO::new);
+        return ResponseEntity.ok().body(listDto).getBody();
     }
 
     @PostMapping(value = "/new/player")
     public ResponseEntity<Usuario> inserirNovoUsuario(@RequestBody @Valid NovoUsuarioDTO newUserDTO) {
-        Usuario user = usuarioService.inserirNovoUsuario(new Usuario(newUserDTO.id(), newUserDTO.nome(),
-                newUserDTO.username(), newUserDTO.password(), newUserDTO.chavePix(), newUserDTO.endereco(), newUserDTO.role(),true,null));
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
-        return ResponseEntity.created(uri).body(user);
+        Usuario usuario = new Usuario(newUserDTO);
+        usuario = usuarioService.inserirNovoUsuario(usuario);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newUserDTO.id()).toUri();
+        return ResponseEntity.created(uri).body(usuario);
     }
 
     @PutMapping(value = "update/{id}")
-    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Integer id, @RequestBody @Valid UsuarioDTO userDTO) {
-        Usuario user = usuarioService.fromDTO(userDTO);
-        user.setId(id);
-        user = usuarioService.atualizarUsuario(id, user);
+    public ResponseEntity<Usuario> atualizarUsuario(@RequestBody @Valid NovoUsuarioDTO userDTO) {
+        Usuario usuario = new Usuario(userDTO);
+        usuario = usuarioService.atualizarUsuario(usuario);
         return ResponseEntity.noContent().build();
     }
 }

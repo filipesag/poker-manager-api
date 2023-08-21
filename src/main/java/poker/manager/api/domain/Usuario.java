@@ -1,10 +1,13 @@
 package poker.manager.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import poker.manager.api.domain.enums.Permissao;
 import org.springframework.security.core.userdetails.UserDetails;
+import poker.manager.api.dto.NovoUsuarioDTO;
+import poker.manager.api.dto.UsuarioDTO;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -39,16 +42,16 @@ public class Usuario implements Serializable, UserDetails {
 
     public Usuario(){}
 
-    public Usuario(Integer id, String nome, String username, String password, String chavePix, String endereco, Permissao role, Boolean isEnabled, Set<UsuarioPartida> partidas) {
-        this.id = id;
-        this.nome = nome;
-        this.username = username;
-        this.password = password;
-        this.chavePix = chavePix;
-        this.endereco = endereco;
-        this.partidas = partidas;
-        this.isEnabled = isEnabled;
-        this.role = role;
+    public Usuario(NovoUsuarioDTO usuarioDTO) {
+        this.id = usuarioDTO.id();
+        this.nome = usuarioDTO.nome();
+        this.username = usuarioDTO.username();
+        this.password = usuarioDTO.password();
+        this.chavePix = usuarioDTO.chavePix();
+        this.endereco = usuarioDTO.endereco();
+        this.partidas = usuarioDTO.partidas();
+        this.isEnabled = usuarioDTO.isEnabled();
+        this.role = usuarioDTO.role();
     }
 
     public Integer getId() {
@@ -92,6 +95,7 @@ public class Usuario implements Serializable, UserDetails {
     }
 
 
+    @JsonIgnore
     public Set<UsuarioPartida> getPartidas() {
         return partidas;
     }

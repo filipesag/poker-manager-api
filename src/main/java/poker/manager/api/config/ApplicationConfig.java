@@ -52,15 +52,14 @@ public class ApplicationConfig {
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
     @Bean
     public PhysicalNamingStrategy physical() {
         return new PhysicalNamingStrategyStandardImpl();
     }
 
-   // @Bean
-    //public ImplicitNamingStrategy implicit() {
-    //    return new ImplicitNamingStrategyLegacyJpaImpl();
-    //}
+    @Bean
+    public ImplicitNamingStrategy implicit() {
+        return new ImplicitNamingStrategyLegacyJpaImpl();
+    }
 
 }

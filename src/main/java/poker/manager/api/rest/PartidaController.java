@@ -22,22 +22,23 @@ public class PartidaController {
 
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Partida> buscarPartida(@PathVariable Integer id) {
-        Partida partida = partidaService.buscarPartida(id);
+    public ResponseEntity<PartidaDTO> buscarPartida(@PathVariable Integer id) {
+        PartidaDTO partida = partidaService.buscarPartida(id);
         return ResponseEntity.ok().body(partida);
     }
 
     @PostMapping(value = "/creation")
-    public ResponseEntity<Partida> criarNovaPartida(@RequestBody @DateTimeFormat(pattern = "dd/MM/yyyy") PartidaDTO partidaDTO) {
-        Partida partida = partidaService.criarPartida(partidaDTO);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(partida.getId()).toUri();
+    public ResponseEntity<PartidaDTO> criarNovaPartida(@RequestBody @DateTimeFormat(pattern = "dd/MM/yyyy") PartidaDTO partidaDTO) {
+        var partida = partidaService.criarPartida(partidaDTO);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(partida.id()).toUri();
         return ResponseEntity.created(uri).body(partida);
     }
 
     @PostMapping(value = "/host")
-    public ResponseEntity<Partida> cadastrarAnfitriao(@RequestBody UsuarioDTO usuarioDTO, PartidaDTO partidaDTO) {
-        Partida partida = partidaService.cadastrarAnfitriao(usuarioDTO, partidaDTO);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(partida.getId()).toUri();
+    public ResponseEntity<PartidaDTO> cadastrarAnfitriao(@RequestBody PartidaDTO partidaDTO, UsuarioDTO anfitriaoDTO) {
+        System.out.println(partidaDTO.toString() + "\n" +anfitriaoDTO.toString());
+        var partida = partidaService.cadastrarAnfitriao(partidaDTO, anfitriaoDTO);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(partida.id()).toUri();
         return ResponseEntity.created(uri).body(partida);
     }
 

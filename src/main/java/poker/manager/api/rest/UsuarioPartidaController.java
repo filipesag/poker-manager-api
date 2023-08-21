@@ -25,18 +25,18 @@ public class UsuarioPartidaController {
 
     @PostMapping(value = "/user/confirmation")
     public ResponseEntity<UsuarioPartida> confirmarPresenca(@RequestBody PartidaDTO partidaDTO, UsuarioDTO usuarioDTO){
-        UsuarioPartida usuarioPartida = usuarioPartidaService.confirmarPresenca(partidaDTO,usuarioDTO);
+        UsuarioPartida usuarioPartida = usuarioPartidaService.confirmarPresenca(partidaDTO, usuarioDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(usuarioPartida.getId()).toUri();
         return ResponseEntity.created(uri).body(usuarioPartida);
     }
 
     @PutMapping(value = "/calloff")
     public ResponseEntity<UsuarioPartida> cancelarPresenca(@RequestBody UsuarioDTO usuarioDTO, PartidaDTO partidaDTO) {
-        UsuarioPartida usuarioPartida = usuarioPartidaService.cancelarPresenca(usuarioDTO, partidaDTO);
+        UsuarioPartida usuarioPartida = usuarioPartidaService.cancelarPresenca(usuarioDTO, partidaDTO.id());
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/usersmatch/find/all")
+    @GetMapping(value = "/find/all")
     public ResponseEntity<List<UsuarioPartida>>buscarTudo(){
         List<UsuarioPartida> usuarioPartida = usuarioPartidaService.buscarTudo();
         return ResponseEntity.ok().body(usuarioPartida);
