@@ -2,14 +2,11 @@ package poker.manager.api.dto;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import poker.manager.api.domain.Usuario;
 import poker.manager.api.domain.UsuarioPartida;
-import poker.manager.api.domain.enums.Permissao;
-
-import java.io.Serializable;
+import poker.manager.api.domain.enums.UserRole;
 import java.util.Set;
 
 public record UsuarioDTO(
@@ -25,7 +22,7 @@ public record UsuarioDTO(
         String chavePix,
         String endereco,
         @Enumerated(EnumType.STRING)
-        Permissao role, Boolean isEnabled, Set<UsuarioPartida> partidas) {
+        UserRole role, Boolean isEnabled, Set<UsuarioPartida> partidas) {
 
     public UsuarioDTO(Usuario usuario) {
         this(usuario.getId(), usuario.getNome(),usuario.getUsername(),

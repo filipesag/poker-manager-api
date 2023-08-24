@@ -33,26 +33,26 @@ public class UsuarioPartidaService {
         return usuarioPartidaRepository.findAll();
     }
 
-    public UsuarioPartida confirmarPresenca(PartidaDTO partidaDTO, UsuarioDTO usuarioDTO) {
-        Usuario user = new Usuario();
-        user.setId(partidaDTO.id());
-        Partida partida = new Partida();
-        partida.setId(usuarioDTO.id());
+    public UsuarioPartida confirmarPresenca(Partida partida, Usuario usuario) {
+        usuario = usuarioRepository.getReferenceById(usuario.getId());
+        partida = partidaRepository.getReferenceById(partida.getId());
         UsuarioPartida usuarioPartida = new UsuarioPartida();
-        usuarioPartida.getId().setUsuario(user);
         usuarioPartida.getId().setPartida(partida);
+        usuarioPartida.getId().setUsuario(usuario);
+        if(usuarioPartida.getId().getUsuario().getId() == partida.getUsuarioAnfitriaoId()){
+            usuarioPartida.setAnfitriao(true);
+        }
         usuarioPartidaRepository.save(usuarioPartida);
-        usuarioRepository.save(user);
+        usuarioRepository.save(usuario);
         partidaRepository.save(partida);
         return usuarioPartida;
     }
 
-    public UsuarioPartida cancelarPresenca(UsuarioDTO usarioDTO, Integer partidaId) {
-        PartidaDTO partida = partidaService.buscarPartida(partidaId);
-        Usuario user = new Usuario();
-        user.setId(usarioDTO.id());
-        UsuarioPartida usuarioPartida = usuarioPartidaRepository.findFirstByIdUsuarioAndIdPartida(user.getId(),partida.id());
-        if (partida.usuarioAnfitriaoId() == usuarioPartida.getId().getUsuario().getId()) {
+    public UsuarioPartida cancelarPresenca(Usuario usario, Integer partidaId) {
+        Partida partida = partidaService.buscarPartida(partidaId);
+        Usuario usuarioCancelando = usuarioRepository.getReferenceById(usario.getId());
+        UsuarioPartida usuarioPartida = usuarioPartidaRepository.findFirstByIdUsuarioAndIdPartida(usario.getId(),partida.getId());
+        if (partida.getUsuarioAnfitriaoId() == usuarioPartida.getId().getUsuario().getId()) {
             partidaService.anfitriaoCancelado(partida);
         }
         usuarioPartida.setCancelado(true);

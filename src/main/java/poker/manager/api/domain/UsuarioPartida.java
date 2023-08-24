@@ -5,8 +5,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import poker.manager.api.dto.UsuarioPartidaDTO;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "usuario_partida")
@@ -29,15 +31,15 @@ public class UsuarioPartida implements Serializable {
     public UsuarioPartida() {
     }
 
-    public UsuarioPartida(Partida partida, Usuario usuario, Boolean isRebuy, Integer colocacao, Double netProFit, Integer fichasFinal, Boolean isAnfitriao, Boolean isCancelado) {
+    public UsuarioPartida(Partida partida, Usuario usuario, UsuarioPartidaDTO usuarioPartidaDTO) {
         id.setPartida(partida);
         id.setUsuario(usuario);
-        this.isRebuy = isRebuy;
-        this.colocacao = colocacao;
-        this.netProFit = netProFit;
-        this.fichasFinal = fichasFinal;
-        this.isAnfitriao = isAnfitriao;
-        this.isCancelado = isCancelado;
+        this.isRebuy = usuarioPartidaDTO.isRebuy();
+        this.colocacao = usuarioPartidaDTO.colocacao();
+        this.netProFit = usuarioPartidaDTO.netProFit();
+        this.fichasFinal = usuarioPartidaDTO.fichasFinal();
+        this.isAnfitriao = usuarioPartidaDTO.isAnfitriao();
+        this.isCancelado = usuarioPartidaDTO.isCancelado();
     }
 
     public UsuarioPartidaPK getId() {
@@ -94,5 +96,17 @@ public class UsuarioPartida implements Serializable {
 
     public void setCancelado(Boolean cancelado) {
         isCancelado = cancelado;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UsuarioPartida that)) return false;
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

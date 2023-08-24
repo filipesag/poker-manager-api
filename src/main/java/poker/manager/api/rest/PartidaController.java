@@ -1,5 +1,7 @@
 package poker.manager.api.rest;
 
+
+import jakarta.transaction.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import poker.manager.api.domain.Partida;
@@ -22,34 +24,38 @@ public class PartidaController {
 
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<PartidaDTO> buscarPartida(@PathVariable Integer id) {
-        PartidaDTO partida = partidaService.buscarPartida(id);
+    public ResponseEntity<Partida> buscarPartida(@PathVariable Integer id) {
+        Partida partida = partidaService.buscarPartida(id);
         return ResponseEntity.ok().body(partida);
     }
 
+    @Transactional
     @PostMapping(value = "/creation")
-    public ResponseEntity<PartidaDTO> criarNovaPartida(@RequestBody @DateTimeFormat(pattern = "dd/MM/yyyy") PartidaDTO partidaDTO) {
-        var partida = partidaService.criarPartida(partidaDTO);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(partida.id()).toUri();
+    public ResponseEntity<Partida> criarNovaPartida(@RequestBody @DateTimeFormat(pattern = "dd/MM/yyyy") PartidaDTO partidaDTO) {
+        Partida partida = new Partida(partidaDTO);
+        partida = partidaService.criarPartida(partida);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(partida.getId()).toUri();
         return ResponseEntity.created(uri).body(partida);
     }
 
-    @PostMapping(value = "/host")
-    public ResponseEntity<PartidaDTO> cadastrarAnfitriao(@RequestBody PartidaDTO partidaDTO, UsuarioDTO anfitriaoDTO) {
-        System.out.println(partidaDTO.toString() + "\n" +anfitriaoDTO.toString());
-        var partida = partidaService.cadastrarAnfitriao(partidaDTO, anfitriaoDTO);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(partida.id()).toUri();
-        return ResponseEntity.created(uri).body(partida);
+    @Transactional
+    @PutMapping(value = "/host")
+    public ResponseEntity<Partida> cadastrarAnfitriao(@RequestBody PartidaDTO partidaDTO) {
+        Partida partida = new Partida(partidaDTO);
+        partidaService.cadastrarAnfitriao(partida);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/start-match")
-    public ResponseEntity<Partida> iniciarPartida(@RequestBody PartidaDTO partida){
+    public ResponseEntity<Partida> iniciarPartida(@RequestBody PartidaDTO partidaDTO){
+        Partida partida = new Partida(partidaDTO);
         partidaService.iniciarPartida(partida);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/calloff-match")
-    public ResponseEntity<Partida> cancelarPartida(@RequestBody PartidaDTO partida) {
+    public ResponseEntity<Partida> cancelarPartida(@RequestBody PartidaDTO partidaDTO) {
+        Partida partida = new Partida(partidaDTO);
         partidaService.cancelarPartida(partida);
         return ResponseEntity.noContent().build();
     }

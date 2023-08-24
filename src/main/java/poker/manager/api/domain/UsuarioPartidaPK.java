@@ -34,4 +34,6 @@ public class UsuarioPartidaPK implements Serializable {
     public void setPartida(Partida partida) {
         this.partida = partida;
     }
+
+
 }

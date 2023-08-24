@@ -6,12 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import poker.manager.api.domain.Usuario;
-import poker.manager.api.dto.NovoUsuarioDTO;
-import poker.manager.api.dto.UsuarioAtualizadoDTO;
-import poker.manager.api.dto.UsuarioDTO;
 import poker.manager.api.repository.UsuarioRepository;
 
-import java.util.List;
 import java.util.Optional;
 @Service
 public class UsuarioService {
@@ -28,8 +24,8 @@ public class UsuarioService {
         return user.get();
     }
 
-
     public Usuario inserirNovoUsuario(Usuario usuario){
+        usuario.setPassword(encoder.encode(usuario.getPassword()));
         usuario = usuarioRepository.save(usuario);
         return usuario;
     }

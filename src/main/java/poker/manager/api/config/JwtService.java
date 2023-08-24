@@ -39,12 +39,13 @@ public class JwtService {
             Map<String, Object> extraClaims,
             UserDetails userDetails
     ) {
-        return buildToken(extraClaims, userDetails);
+        return buildToken(extraClaims, userDetails, expiration);
     }
 
     private String buildToken(
             Map<String, Object> extraClaims,
-            UserDetails userDetails
+            UserDetails userDetails,
+            Long expiration
     ) {
         return Jwts
                 .builder()

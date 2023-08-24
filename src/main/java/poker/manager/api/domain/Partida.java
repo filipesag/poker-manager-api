@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import jakarta.persistence.*;
 import poker.manager.api.domain.enums.PartidaStatus;
+import poker.manager.api.dto.PartidaDTO;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -44,13 +45,13 @@ public class Partida implements Serializable {
     }
 
     public
-    Partida(Integer id, Integer usuarioAnfitriaoId, Integer quantidadeJogadores, LocalDate data, PartidaStatus status)
+    Partida(PartidaDTO partidaDTO)
     {
-        this.id = id;
-        this.usuarioAnfitriaoId = usuarioAnfitriaoId;
-        this.quantidadeJogadores = quantidadeJogadores;
-        this.data = data;
-        this.status = status;
+        this.id = partidaDTO.id();
+        this.usuarioAnfitriaoId = partidaDTO.usuarioAnfitriaoId();
+        this.quantidadeJogadores = partidaDTO.quantidadeJogadores();
+        this.data = partidaDTO.data();
+        this.status = partidaDTO.status();
     }
 
     public Integer getId () {

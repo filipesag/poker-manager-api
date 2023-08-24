@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import poker.manager.api.domain.enums.Permissao;
+import poker.manager.api.domain.enums.UserRole;
 import org.springframework.security.core.userdetails.UserDetails;
 import poker.manager.api.dto.NovoUsuarioDTO;
 import poker.manager.api.dto.UsuarioDTO;
@@ -34,7 +34,7 @@ public class Usuario implements Serializable, UserDetails {
     private Boolean isEnabled;
 
     @Enumerated(EnumType.STRING)
-    private Permissao role;
+    private UserRole role;
 
     @OneToMany(mappedBy = "id.usuario")
     private Set<UsuarioPartida> partidas = new HashSet<>();
@@ -47,6 +47,17 @@ public class Usuario implements Serializable, UserDetails {
         this.nome = usuarioDTO.nome();
         this.username = usuarioDTO.username();
         this.password = usuarioDTO.password();
+        this.chavePix = usuarioDTO.chavePix();
+        this.endereco = usuarioDTO.endereco();
+        this.partidas = usuarioDTO.partidas();
+        this.isEnabled = usuarioDTO.isEnabled();
+        this.role = usuarioDTO.role();
+    }
+
+    public Usuario(UsuarioDTO usuarioDTO){
+        this.id = usuarioDTO.id();
+        this.nome = usuarioDTO.nome();
+        this.username = usuarioDTO.username();
         this.chavePix = usuarioDTO.chavePix();
         this.endereco = usuarioDTO.endereco();
         this.partidas = usuarioDTO.partidas();
@@ -104,11 +115,11 @@ public class Usuario implements Serializable, UserDetails {
         this.partidas = partidas;
     }
 
-    public Permissao getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(Permissao role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 
@@ -122,10 +133,10 @@ public class Usuario implements Serializable, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == Permissao.ADMINISTRADOR)
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USUARIO"));
+        if(this.role == UserRole.ADMIN)
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
         else
-            return List.of(new SimpleGrantedAuthority("ROLE_USUARIO"));
+            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override

@@ -6,15 +6,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import poker.manager.api.domain.Usuario;
 import poker.manager.api.dto.NovoUsuarioDTO;
-import poker.manager.api.dto.UsuarioAtualizadoDTO;
 import poker.manager.api.dto.UsuarioDTO;
 import poker.manager.api.service.UsuarioService;
 import java.net.URI;
-import java.util.List;
 
 
 @RestController
@@ -23,6 +22,9 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     @GetMapping(value = "find/{id}")
     public ResponseEntity<UsuarioDTO> buscarUsuario(@PathVariable Integer id) {

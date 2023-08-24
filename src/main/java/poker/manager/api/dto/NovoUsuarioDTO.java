@@ -7,10 +7,13 @@ import jakarta.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 import poker.manager.api.domain.Usuario;
 import poker.manager.api.domain.UsuarioPartida;
-import poker.manager.api.domain.enums.Permissao;
+import poker.manager.api.domain.enums.UserRole;
+
+
 import java.util.Set;
 
 public record NovoUsuarioDTO(
+
 
         Integer id,
         @NotEmpty
@@ -26,8 +29,9 @@ public record NovoUsuarioDTO(
         String chavePix,
         String endereco,
         @Enumerated(EnumType.STRING)
-        Permissao role,
+        UserRole role,
         Boolean isEnabled, Set<UsuarioPartida> partidas) {
+
 
     public NovoUsuarioDTO(Usuario usuario) {
         this(usuario.getId(), usuario.getNome(), usuario.getUsername(), usuario.getPassword(),

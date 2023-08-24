@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import poker.manager.api.domain.Partida;
+import poker.manager.api.domain.Usuario;
 import poker.manager.api.dto.PartidaDTO;
 import poker.manager.api.dto.UsuarioDTO;
 import poker.manager.api.service.PartidaService;
@@ -25,14 +27,17 @@ public class UsuarioPartidaController {
 
     @PostMapping(value = "/user/confirmation")
     public ResponseEntity<UsuarioPartida> confirmarPresenca(@RequestBody PartidaDTO partidaDTO, UsuarioDTO usuarioDTO){
-        UsuarioPartida usuarioPartida = usuarioPartidaService.confirmarPresenca(partidaDTO, usuarioDTO);
+        Usuario usuario = new Usuario(usuarioDTO);
+        Partida partida = new Partida(partidaDTO);
+        UsuarioPartida usuarioPartida = usuarioPartidaService.confirmarPresenca(partida, usuario);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(usuarioPartida.getId()).toUri();
         return ResponseEntity.created(uri).body(usuarioPartida);
     }
 
     @PutMapping(value = "/calloff")
     public ResponseEntity<UsuarioPartida> cancelarPresenca(@RequestBody UsuarioDTO usuarioDTO, PartidaDTO partidaDTO) {
-        UsuarioPartida usuarioPartida = usuarioPartidaService.cancelarPresenca(usuarioDTO, partidaDTO.id());
+        Usuario usuario = new Usuario(usuarioDTO);
+        UsuarioPartida usuarioPartida = usuarioPartidaService.cancelarPresenca(usuario, partidaDTO.id());
         return ResponseEntity.noContent().build();
     }
 
