@@ -5,10 +5,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import poker.manager.api.domain.Partida;
 import poker.manager.api.domain.Usuario;
+import poker.manager.api.domain.UsuarioPartida;
 import poker.manager.api.repository.UsuarioRepository;
 
 import java.util.Optional;
+import java.util.Set;
+
 @Service
 public class UsuarioService {
 
@@ -48,6 +52,5 @@ public class UsuarioService {
     public Page<Usuario> findAll(Pageable pageable) {
         return usuarioRepository.findAllByIsEnabledTrue(pageable);
     }
-
 
 }

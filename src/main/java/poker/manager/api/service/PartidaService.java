@@ -13,7 +13,9 @@ import poker.manager.api.repository.UsuarioPartidaRepository;
 import poker.manager.api.repository.UsuarioRepository;
 import poker.manager.api.domain.Partida;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -50,16 +52,18 @@ public class PartidaService {
         partidaASerCriada.setUsuarioAnfitriaoId(partida.getUsuarioAnfitriaoId());
         partidaASerCriada.setStatus(PartidaStatus.ABERTA);
         partidaASerCriada.setQuantidadeJogadores(partida.getQuantidadeJogadores());
-        partidaRepository.save(partidaASerCriada);
         Usuario anfitriao = usuarioRepository.findById(partidaASerCriada.getUsuarioAnfitriaoId()).get();
-        UsuarioPartida usuarioPartida = usuarioPartidaService.confirmarPresenca(partida, anfitriao);
+        UsuarioPartida usuarioPartida = new UsuarioPartida();
+        usuarioPartida.getId().setUsuario(anfitriao);
+        partidaRepository.save(partidaASerCriada);
+        usuarioPartida = usuarioPartidaService.confirmarPresenca(partidaASerCriada, anfitriao);
         usuarioPartidaRepository.save(usuarioPartida);
     }
 
     public void anfitriaoCancelado(Partida partida) {
-        Partida partidaAnfitriaoCancelando = partidaRepository.getReferenceById(partida.getId());
+        partida = partidaRepository.getReferenceById(partida.getId());
         partida.setUsuarioAnfitriaoId(null);
-        partida.setStatus(PartidaStatus.ABERTA);
+        partida.setStatus(PartidaStatus.AGUARDANDO_ANFITRIAO);
         partida.setQuantidadeJogadores(null);
         partidaRepository.save(partida);
     }
@@ -72,8 +76,18 @@ public class PartidaService {
 
     public void cancelarPartida(Partida partida) {
         partida = partidaRepository.getReferenceById(partida.getId());
+        Set<UsuarioPartida> players = usuarioPartidaRepository.findAllPlayersByMatch(partida.getId());
+        for(UsuarioPartida player:players){
+            player.setCancelado(true);
+            player.setAnfitriao(false);
+        }
         partida.setStatus(PartidaStatus.CANCELADA);
         partidaRepository.save(partida);
+    }
+
+    public Partida buscarPorStatusAberta(){
+       Partida partida = partidaRepository.findByStatusAberta();
+        return partida;
     }
 
     public String obterEndereco(PartidaDTO partidaDTO){
@@ -82,4 +96,8 @@ public class PartidaService {
         return anfitriao.getEndereco();
     }
 
+    public void finalizarPartida(Partida partida) {
+        partida.setStatus(PartidaStatus.FINALIZADA);
+        partidaRepository.save(partida);
+    }
 }

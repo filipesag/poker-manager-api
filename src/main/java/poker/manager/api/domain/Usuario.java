@@ -36,6 +36,7 @@ public class Usuario implements Serializable, UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "id.usuario")
     private Set<UsuarioPartida> partidas = new HashSet<>();
 
@@ -168,4 +169,5 @@ public class Usuario implements Serializable, UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

@@ -5,13 +5,13 @@ import org.springframework.stereotype.Service;
 import poker.manager.api.domain.Partida;
 import poker.manager.api.domain.Usuario;
 import poker.manager.api.domain.UsuarioPartida;
-import poker.manager.api.dto.PartidaDTO;
-import poker.manager.api.dto.UsuarioDTO;
 import poker.manager.api.repository.PartidaRepository;
 import poker.manager.api.repository.UsuarioPartidaRepository;
 import poker.manager.api.repository.UsuarioRepository;
 
 import java.util.List;
+import java.util.Set;
+
 @Service
 public class UsuarioPartidaService {
     @Autowired
@@ -27,8 +27,6 @@ public class UsuarioPartidaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-
-
     public List<UsuarioPartida> buscarTudo(){
         return usuarioPartidaRepository.findAll();
     }
@@ -39,7 +37,7 @@ public class UsuarioPartidaService {
         UsuarioPartida usuarioPartida = new UsuarioPartida();
         usuarioPartida.getId().setPartida(partida);
         usuarioPartida.getId().setUsuario(usuario);
-        if(usuarioPartida.getId().getUsuario().getId() == partida.getUsuarioAnfitriaoId()){
+        if(usuarioPartida.getId().getUsuario().getId().equals(partida.getUsuarioAnfitriaoId())){
             usuarioPartida.setAnfitriao(true);
         }
         usuarioPartidaRepository.save(usuarioPartida);
@@ -48,16 +46,20 @@ public class UsuarioPartidaService {
         return usuarioPartida;
     }
 
-    public UsuarioPartida cancelarPresenca(Usuario usario, Integer partidaId) {
-        Partida partida = partidaService.buscarPartida(partidaId);
-        Usuario usuarioCancelando = usuarioRepository.getReferenceById(usario.getId());
-        UsuarioPartida usuarioPartida = usuarioPartidaRepository.findFirstByIdUsuarioAndIdPartida(usario.getId(),partida.getId());
+    public void cancelarPresenca(Usuario usuario, Integer partidaId) {
+        Partida partida = partidaRepository.getReferenceById(partidaId);
+        UsuarioPartida usuarioPartida = usuarioPartidaRepository.findByIdUsuarioAndIdPartida(partida.getId(),usuario.getId());
         if (partida.getUsuarioAnfitriaoId() == usuarioPartida.getId().getUsuario().getId()) {
             partidaService.anfitriaoCancelado(partida);
+            usuarioPartida.setAnfitriao(false);
         }
         usuarioPartida.setCancelado(true);
         usuarioPartidaRepository.save(usuarioPartida);
-        return usuarioPartida;
+    }
+
+    public Integer obterNumeroJogadores(Integer partidaId) {
+        Set<UsuarioPartida> jogadores = usuarioPartidaRepository.findAllPlayersByMatch(partidaId);
+        return jogadores.size();
     }
 
 }

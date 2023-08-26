@@ -62,7 +62,7 @@ public class Partida implements Serializable {
         this.id = id;
     }
 
-    @JsonIgnore
+
     public Set<UsuarioPartida> getJogadores () {
         return jogadores;
     }

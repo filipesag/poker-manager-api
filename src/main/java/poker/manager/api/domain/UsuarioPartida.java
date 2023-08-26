@@ -1,10 +1,9 @@
 package poker.manager.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import poker.manager.api.dto.PartidaDTO;
+import poker.manager.api.dto.UsuarioDTO;
 import poker.manager.api.dto.UsuarioPartidaDTO;
 
 import java.io.Serializable;
@@ -19,14 +18,14 @@ public class UsuarioPartida implements Serializable {
     @EmbeddedId
     private UsuarioPartidaPK id = new UsuarioPartidaPK();
 
-    private Boolean isRebuy;
-    private Integer colocacao;
-    private Double netProFit;
-    private Integer fichasFinal;
-    private Boolean isAnfitriao;
+    private Boolean isRebuy = false;
+    private Integer colocacao = 0;
+    private Double netProFit = 0.00;
+    private Integer fichasFinal = 0;
 
-    @Column(columnDefinition = "boolean default true")
-    private Boolean isCancelado;
+    private Boolean isAnfitriao = false;
+
+    private Boolean isCancelado = false;
 
     public UsuarioPartida() {
     }
@@ -40,6 +39,11 @@ public class UsuarioPartida implements Serializable {
         this.fichasFinal = usuarioPartidaDTO.fichasFinal();
         this.isAnfitriao = usuarioPartidaDTO.isAnfitriao();
         this.isCancelado = usuarioPartidaDTO.isCancelado();
+    }
+
+    public UsuarioPartida(Partida partida, Usuario usuario) {
+        id.setPartida(partida);
+        id.setUsuario(usuario);
     }
 
     public UsuarioPartidaPK getId() {
