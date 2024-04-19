@@ -28,7 +28,7 @@ public class Partida implements Serializable {
     @OneToMany(mappedBy = "id.partida")
     private Set<UsuarioPartida> jogadores = new HashSet<>();
 
-
+    private Double bucketPorPessoa;
     private Integer usuarioAnfitriaoId;
     private Integer quantidadeJogadores;
 
@@ -48,6 +48,7 @@ public class Partida implements Serializable {
     Partida(PartidaDTO partidaDTO)
     {
         this.id = partidaDTO.id();
+        this.bucketPorPessoa = partidaDTO.bucketPorPessoa();
         this.usuarioAnfitriaoId = partidaDTO.usuarioAnfitriaoId();
         this.quantidadeJogadores = partidaDTO.quantidadeJogadores();
         this.data = partidaDTO.data();
@@ -98,6 +99,14 @@ public class Partida implements Serializable {
 
     public Integer getUsuarioAnfitriaoId () {
         return usuarioAnfitriaoId;
+    }
+
+    public Double getBucketPorPessoa() {
+        return bucketPorPessoa;
+    }
+
+    public void setBucketPorPessoa(Double bucketPorPessoa) {
+        this.bucketPorPessoa = bucketPorPessoa;
     }
 
     public void setUsuarioAnfitriaoId (Integer usuarioAnfitriaoId){

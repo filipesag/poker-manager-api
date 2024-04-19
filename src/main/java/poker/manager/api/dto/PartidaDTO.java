@@ -8,12 +8,12 @@ import java.beans.ConstructorProperties;
 import java.time.LocalDate;
 import java.util.Set;
 
-public record PartidaDTO(Integer id, Integer usuarioAnfitriaoId,
+public record PartidaDTO(Integer id, Double bucketPorPessoa, Integer usuarioAnfitriaoId,
                          Integer quantidadeJogadores, LocalDate data, PartidaStatus status,
                          Set<UsuarioPartida> jogadores) {
 
     public PartidaDTO(Partida partida) {
-        this(partida.getId(), partida.getUsuarioAnfitriaoId(), partida.getQuantidadeJogadores(),
+        this(partida.getId(), partida.getBucketPorPessoa(), partida.getUsuarioAnfitriaoId(), partida.getQuantidadeJogadores(),
                 partida.getData(),partida.getStatus(), partida.getJogadores());
     }
 

@@ -1,7 +1,11 @@
 package poker.manager.api.rest;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import jakarta.transaction.Transactional;
+import org.apache.tomcat.util.json.JSONParser;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import poker.manager.api.domain.Partida;
@@ -22,7 +26,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/match")
+@RequestMapping("/api/v1/match")
 public class PartidaController {
 
     @Autowired
@@ -38,9 +42,9 @@ public class PartidaController {
         return ResponseEntity.ok().body(partida);
     }
 
-    @Transactional
+
     @PostMapping(value = "/creation")
-    public ResponseEntity<Partida> criarNovaPartida(@RequestBody @DateTimeFormat(pattern = "dd/MM/yyyy") PartidaDTO partidaDTO) {
+    public ResponseEntity<Partida> criarNovaPartida(@RequestBody PartidaDTO partidaDTO) {
         Partida partida = new Partida(partidaDTO);
         partida = partidaService.criarPartida(partida);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(partida.getId()).toUri();
@@ -53,6 +57,15 @@ public class PartidaController {
         Partida partida = new Partida(partidaDTO);
         partidaService.cadastrarAnfitriao(partida);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/host-adress/{id}")
+    public ResponseEntity<String> obterEndereco(@PathVariable Integer id) {
+
+        Partida partida = partidaService.buscarPartida(id);
+        PartidaDTO partidaDto = new PartidaDTO(partida);
+        Usuario enderecoUsuario = partidaService.obterEndereco(partidaDto);
+        return ResponseEntity.ok().body(enderecoUsuario.getEndereco());
     }
 
 

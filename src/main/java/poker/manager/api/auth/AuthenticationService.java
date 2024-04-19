@@ -30,8 +30,7 @@ public class AuthenticationService {
                 .orElseThrow();
         String jwtToken = jwtService.generateToken(usuario);
 
-        AuthenticationResponse authResponse = new AuthenticationResponse();
-        authResponse.setToken(jwtToken);
+        AuthenticationResponse authResponse = new AuthenticationResponse(jwtToken);
         return authResponse;
     }
 }

@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 
 
 @RestController
-@RequestMapping("match_users")
+@RequestMapping("/api/v1/match_users")
 public class UsuarioPartidaController {
     @Autowired
     private UsuarioPartidaService usuarioPartidaService;

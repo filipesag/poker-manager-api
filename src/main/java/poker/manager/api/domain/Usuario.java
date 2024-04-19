@@ -134,7 +134,11 @@ public class Usuario implements Serializable, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        if(this.role == UserRole.ADMIN) {
+            return List.of(new SimpleGrantedAuthority("ADMIN"), new SimpleGrantedAuthority("USER"));
+        } else {
+            return List.of(new SimpleGrantedAuthority("USER"));
+        }
     }
 
     @Override

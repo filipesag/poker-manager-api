@@ -42,7 +42,8 @@ public class PartidaService {
 
     public Partida criarPartida(Partida partida) {
         partida.setStatus(PartidaStatus.AGUARDANDO_ANFITRIAO);
-        partida =  partidaRepository.save(partida);
+        partida.setBucketPorPessoa(partida.getBucketPorPessoa());
+        partida = partidaRepository.save(partida);
         return partida;
     }
 
@@ -90,10 +91,10 @@ public class PartidaService {
         return partida;
     }
 
-    public String obterEndereco(PartidaDTO partidaDTO){
+    public Usuario obterEndereco(PartidaDTO partidaDTO){
         Integer id = partidaDTO.usuarioAnfitriaoId();
         Usuario anfitriao = usuarioRepository.getReferenceById(id);
-        return anfitriao.getEndereco();
+        return anfitriao;
     }
 
     public void finalizarPartida(Partida partida) {

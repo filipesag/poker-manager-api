@@ -17,7 +17,7 @@ import java.net.URI;
 
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("/api/v1/users")
 public class UsuarioController {
 
     @Autowired
