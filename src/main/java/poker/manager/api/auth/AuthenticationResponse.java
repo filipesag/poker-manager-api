@@ -1,5 +1,6 @@
 package poker.manager.api.auth;
 
+
 public class AuthenticationResponse {
 
     private String token;
@@ -17,6 +18,8 @@ public class AuthenticationResponse {
     public void setToken(String token) {
         this.token = token;
     }
+
+
 
 
 }

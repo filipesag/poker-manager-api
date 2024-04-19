@@ -1,4 +1,4 @@
-CREATE TABLE usuario(
+CREATE TABLE IF NOT EXISTS usuario(
     id SERIAL PRIMARY KEY,
     nome VARCHAR(80) NOT NULL,
     username VARCHAR(20) NOT NULL,

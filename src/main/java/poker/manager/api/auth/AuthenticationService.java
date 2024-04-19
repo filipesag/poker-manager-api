@@ -20,6 +20,7 @@ public class AuthenticationService {
     private JwtService jwtService;
 
 
+
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         manager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getUsername(),
@@ -28,7 +29,9 @@ public class AuthenticationService {
         Usuario usuario = repository.findByUsername(request.getUsername())
                 .orElseThrow();
         String jwtToken = jwtService.generateToken(usuario);
-        AuthenticationResponse authResp = new AuthenticationResponse(jwtToken);
-        return authResp;
+
+        AuthenticationResponse authResponse = new AuthenticationResponse();
+        authResponse.setToken(jwtToken);
+        return authResponse;
     }
 }

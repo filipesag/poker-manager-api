@@ -19,7 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import poker.manager.api.repository.UsuarioRepository;
 
 @Configuration
-
 public class ApplicationConfig {
 
 

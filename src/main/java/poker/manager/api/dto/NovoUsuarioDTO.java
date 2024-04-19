@@ -28,15 +28,17 @@ public record NovoUsuarioDTO(
         @NotEmpty(message = "Preenchimento Obrigatório")
         String chavePix,
         String endereco,
+
+        Boolean isEnabled,
         @Enumerated(EnumType.STRING)
         UserRole role,
-        Boolean isEnabled, Set<UsuarioPartida> partidas) {
+        Set<UsuarioPartida> partidas) {
 
 
     public NovoUsuarioDTO(Usuario usuario) {
         this(usuario.getId(), usuario.getNome(), usuario.getUsername(), usuario.getPassword(),
                 usuario.getChavePix(), usuario.getEndereco(),
-                usuario.getRole(), usuario.getEnabled(), usuario.getPartidas());
+                usuario.getEnabled(),usuario.getRole(), usuario.getPartidas());
     }
 
 }

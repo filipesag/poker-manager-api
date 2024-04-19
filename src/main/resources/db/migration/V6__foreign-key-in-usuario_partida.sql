@@ -1,5 +1,5 @@
 
-CREATE TABLE usuario(
+CREATE TABLE IF NOT EXISTS usuario(
     id SERIAL PRIMARY KEY,
     nome VARCHAR(80) NOT NULL,
     username VARCHAR(20) NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE usuario(
     role VARCHAR(15) NOT NULL
 );
 
-CREATE TABLE partida(
+CREATE TABLE IF NOT EXISTS partida(
     id SERIAL PRIMARY KEY,
     usuarioAnfitriaoId INTEGER NOT NULL,
     quantidadeJogadores INTEGER NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE partida(
     status VARCHAR(22)
 );
 
-CREATE TABLE usuario_partida(
+CREATE TABLE IF NOT EXISTS usuario_partida(
 
     usuario_id INTEGER,
     partida_id INTEGER,

@@ -1,4 +1,4 @@
-CREATE TABLE usuario_partida(
+CREATE TABLE IF NOT EXISTS usuario_partida(
 
     usuario_id INTEGER,
     partida_id INTEGER,
