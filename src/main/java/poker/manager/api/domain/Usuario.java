@@ -1,6 +1,7 @@
 package poker.manager.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,11 +18,12 @@ import java.util.Set;
 
 @Entity
 @Table(name = "usuario")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Usuario implements Serializable, UserDetails {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String nome;
@@ -35,9 +37,8 @@ public class Usuario implements Serializable, UserDetails {
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
-
     @JsonIgnore
-    @OneToMany(mappedBy = "id.usuario")
+    @OneToMany(mappedBy = "usuario")
     private Set<UsuarioPartida> partidas = new HashSet<>();
 
 
@@ -107,7 +108,6 @@ public class Usuario implements Serializable, UserDetails {
     }
 
 
-    @JsonIgnore
     public Set<UsuarioPartida> getPartidas() {
         return partidas;
     }

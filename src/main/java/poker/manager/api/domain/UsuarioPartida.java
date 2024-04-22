@@ -1,9 +1,8 @@
 package poker.manager.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import poker.manager.api.dto.PartidaDTO;
-import poker.manager.api.dto.UsuarioDTO;
 import poker.manager.api.dto.UsuarioPartidaDTO;
 
 import java.io.Serializable;
@@ -14,9 +13,8 @@ import java.util.Objects;
 public class UsuarioPartida implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @JsonIgnore
     @EmbeddedId
-    private UsuarioPartidaPK id = new UsuarioPartidaPK();
+    private UsuarioPartidaId id;
 
     private Boolean isRebuy = false;
     private Integer colocacao = 0;
@@ -27,12 +25,23 @@ public class UsuarioPartida implements Serializable {
 
     private Boolean isCancelado = false;
 
+    @ManyToOne
+    @MapsId("usuarioId")
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Usuario usuario;
+
+    @ManyToOne
+    @MapsId("partidaId")
+    @JoinColumn(name = "partida_id", referencedColumnName = "id")
+    private Partida partida;
+
     public UsuarioPartida() {
     }
 
     public UsuarioPartida(Partida partida, Usuario usuario, UsuarioPartidaDTO usuarioPartidaDTO) {
-        id.setPartida(partida);
-        id.setUsuario(usuario);
+        this.partida = partida;
+        this.usuario = usuario;
         this.isRebuy = usuarioPartidaDTO.isRebuy();
         this.colocacao = usuarioPartidaDTO.colocacao();
         this.netProFit = usuarioPartidaDTO.netProFit();
@@ -42,16 +51,8 @@ public class UsuarioPartida implements Serializable {
     }
 
     public UsuarioPartida(Partida partida, Usuario usuario) {
-        id.setPartida(partida);
-        id.setUsuario(usuario);
-    }
-
-    public UsuarioPartidaPK getId() {
-        return id;
-    }
-
-    public void setId(UsuarioPartidaPK id) {
-        this.id = id;
+        this.partida = partida;
+        this.usuario = usuario;
     }
 
     public Boolean getRebuy() {
@@ -100,6 +101,31 @@ public class UsuarioPartida implements Serializable {
 
     public void setCancelado(Boolean cancelado) {
         isCancelado = cancelado;
+    }
+
+    public Usuario getUsuario() {
+        return this.usuario;
+    }
+
+
+    public Partida getPartida() {
+        return this.partida;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public void setPartida(Partida partida) {
+        this.partida = partida;
+    }
+
+    public UsuarioPartidaId getId() {
+        return id;
+    }
+
+    public void setId(UsuarioPartidaId id) {
+        this.id = id;
     }
 
     @Override

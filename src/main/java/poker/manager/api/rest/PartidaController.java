@@ -18,10 +18,12 @@ import poker.manager.api.domain.Usuario;
 import poker.manager.api.domain.UsuarioPartida;
 import poker.manager.api.dto.PartidaDTO;
 import poker.manager.api.dto.UsuarioDTO;
+import poker.manager.api.dto.UsuarioPartidaDTO;
 import poker.manager.api.service.PartidaService;
 import poker.manager.api.service.UsuarioPartidaService;
 
 import java.net.URI;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -61,7 +63,6 @@ public class PartidaController {
 
     @GetMapping(value = "/host-adress/{id}")
     public ResponseEntity<String> obterEndereco(@PathVariable Integer id) {
-
         Partida partida = partidaService.buscarPartida(id);
         PartidaDTO partidaDto = new PartidaDTO(partida);
         Usuario enderecoUsuario = partidaService.obterEndereco(partidaDto);
@@ -83,31 +84,11 @@ public class PartidaController {
         return ResponseEntity.noContent().build();
     }
 
+
     @PutMapping(value = "/close-match")
     public ResponseEntity<Partida> finalizarPartida(@RequestBody PartidaDTO partidaDTO) {
         Partida partida = new Partida(partidaDTO);
         partidaService.finalizarPartida(partida);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping(value = "/user/confirmation")
-    public ResponseEntity<Partida> confirmarPresenca(@RequestBody UsuarioDTO usuarioDTO){
-        Usuario usuario = new Usuario(usuarioDTO);
-        Partida partida = partidaService.buscarPorStatusAberta();
-        Integer quantidadeDeJogadores = partida.getQuantidadeJogadores();
-        Integer numeroDeJogadaoresNaMesa = usuarioPartidaService.obterNumeroJogadores(partida.getId());
-        if (numeroDeJogadaoresNaMesa < quantidadeDeJogadores) {
-            usuarioPartidaService.confirmarPresenca(partida, usuario);
-        }
-        return ResponseEntity.noContent().build();
-    }
-
-    @PutMapping(value = "/calloff")
-    public ResponseEntity<Partida> cancelarPresenca(@RequestBody UsuarioDTO usuarioDTO) {
-        Usuario usuario = new Usuario(usuarioDTO);
-        Partida partida = partidaService.buscarPorStatusAberta();
-        Integer partidaId = partida.getId();
-        usuarioPartidaService.cancelarPresenca(usuario, partidaId);
         return ResponseEntity.noContent().build();
     }
 }

@@ -2,8 +2,8 @@ package poker.manager.api.domain.enums;
 
 public enum UserRole {
 
-    ADMIN("admin"),
-    USER("user");
+    ADMIN("ADMIN"),
+    USER("USER");
 
     private String role;
 

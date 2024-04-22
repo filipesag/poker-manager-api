@@ -15,4 +15,7 @@ public interface UsuarioPartidaRepository extends JpaRepository<UsuarioPartida, 
 
     @Query(value = "SELECT * FROM usuario_partida u WHERE u.partida_id = ?1", nativeQuery = true)
     Set<UsuarioPartida> findAllPlayersByMatch(Integer idPartida);
+
+    @Query(value = "SELECT * FROM usuario_partida u WHERE u.partida_id = ?1", nativeQuery = true)
+    Set<UsuarioPartida> findByIdPartida(Integer idPartida);
 }

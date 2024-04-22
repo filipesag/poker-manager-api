@@ -13,7 +13,9 @@ import poker.manager.api.dto.PartidaDTO;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,10 +24,11 @@ public class Partida implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @OneToMany(mappedBy = "id.partida")
+    @JsonIgnore
+    @OneToMany(mappedBy = "partida")
     private Set<UsuarioPartida> jogadores = new HashSet<>();
 
     private Double bucketPorPessoa;
@@ -63,9 +66,13 @@ public class Partida implements Serializable {
         this.id = id;
     }
 
-
+    @JsonIgnore
     public Set<UsuarioPartida> getJogadores () {
-        return jogadores;
+        Set<UsuarioPartida> list = new HashSet<>();
+        for (UsuarioPartida x : jogadores) {
+            list.add(x);
+        }
+        return list;
     }
 
     public void setJogadores (Set <UsuarioPartida> usuarios) {

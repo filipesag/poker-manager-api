@@ -49,6 +49,11 @@ public class UsuarioService {
         oldUser.setEndereco(newUser.getEndereco());
     }
 
+    public Set<Usuario> buscaTodosEmPartidaIniciada() {
+        Set<Usuario> users = usuarioRepository.findAllInMatchStarted();
+        return users;
+    }
+
     public Page<Usuario> findAll(Pageable pageable) {
         return usuarioRepository.findAllByIsEnabledTrue(pageable);
     }

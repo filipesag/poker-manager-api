@@ -55,7 +55,7 @@ public class PartidaService {
         partidaASerCriada.setQuantidadeJogadores(partida.getQuantidadeJogadores());
         Usuario anfitriao = usuarioRepository.findById(partidaASerCriada.getUsuarioAnfitriaoId()).get();
         UsuarioPartida usuarioPartida = new UsuarioPartida();
-        usuarioPartida.getId().setUsuario(anfitriao);
+        usuarioPartida.setUsuario(anfitriao);
         partidaRepository.save(partidaASerCriada);
         usuarioPartida = usuarioPartidaService.confirmarPresenca(partidaASerCriada, anfitriao);
         usuarioPartidaRepository.save(usuarioPartida);
@@ -88,6 +88,11 @@ public class PartidaService {
 
     public Partida buscarPorStatusAberta(){
        Partida partida = partidaRepository.findByStatusAberta();
+        return partida;
+    }
+
+    public Partida findByStatusInciada() {
+        Partida partida = partidaRepository.findByStatusInciada();
         return partida;
     }
 

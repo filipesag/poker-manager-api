@@ -1,11 +1,12 @@
 package poker.manager.api.dto;
 
 import poker.manager.api.domain.Partida;
+import poker.manager.api.domain.Usuario;
 import poker.manager.api.domain.UsuarioPartida;
 import poker.manager.api.domain.enums.PartidaStatus;
 
-import java.beans.ConstructorProperties;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 public record PartidaDTO(Integer id, Double bucketPorPessoa, Integer usuarioAnfitriaoId,

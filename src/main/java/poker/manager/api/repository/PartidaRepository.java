@@ -9,4 +9,7 @@ import poker.manager.api.domain.Partida;
 public interface PartidaRepository extends JpaRepository<Partida, Integer> {
     @Query(value = "SELECT * FROM PARTIDA p WHERE p.status = 'ABERTA'", nativeQuery = true)
     Partida findByStatusAberta();
+
+    @Query(value = "SELECT * FROM PARTIDA p WHERE p.status = 'INICIADA'", nativeQuery = true)
+    Partida findByStatusInciada();
 }
