@@ -1,11 +1,14 @@
 package poker.manager.api.rest;
 
+import jakarta.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import poker.manager.api.domain.Partida;
 import poker.manager.api.domain.Usuario;
+import poker.manager.api.dto.PartidaDTO;
 import poker.manager.api.dto.UsuarioDTO;
+import poker.manager.api.dto.UsuarioPartidaDTO;
 import poker.manager.api.service.PartidaService;
 import poker.manager.api.service.UsuarioPartidaService;
 import poker.manager.api.domain.UsuarioPartida;
@@ -55,13 +58,33 @@ public class UsuarioPartidaController {
     }
 
     @PutMapping(value = "/caculate-profit")
-    public ResponseEntity<UsuarioPartida> calculaGanhos(@PathVariable Integer id) {
-        Partida partida = partidaService.buscarPartida(id);
-        Integer fichasTotais = usuarioPartidaService.calculaFichasTotais(id);
-        Integer jogadoresDaPartida = usuarioPartidaService.obterJogadoresDePartida(id).size();
-        Double valorDoPote = usuarioPartidaService.calculaValorDoPote(id);
-        return null;
+    public ResponseEntity<UsuarioPartida> calculaGanhos() {
+        Partida partida = partidaService.buscaPorStatusFinalizada();
+        Integer fichasTotais = usuarioPartidaService.calculaFichasTotais(partida.getId());
+        Double valorDoPote = usuarioPartidaService.calculaValorDoPote(partida.getId());
+        Set<UsuarioPartida> players = partida.getJogadores();
+        List<UsuarioPartida> sortedPlayers = new ArrayList<>(players);
+        sortedPlayers.sort(Comparator.comparingDouble(UsuarioPartida::getNetProFit).reversed());
+        Double netProFit;
+        for(UsuarioPartida x : players) {
+            Double valorPorUnidade = valorDoPote/fichasTotais;
+            Double profit = valorPorUnidade * x.getFichasFinal();
+            if(x.getRebuy() == true) {
+                netProFit = profit - (partida.getBucketPorPessoa() * 2);
+            }else {
+                netProFit = profit - (partida.getBucketPorPessoa());
+            }
+            x.setNetProFit(Math.round(netProFit * 100.0) / 100.0);
+            usuarioPartidaService.inserirDadosFimDaPartida(x);
+        }
+        int colocacao = 1;
+        for (UsuarioPartida player : sortedPlayers) {
+            player.setColocacao(colocacao++);
+            usuarioPartidaService.inserirDadosFimDaPartida(player);
+        }
+        return ResponseEntity.noContent().build();
     }
+
 
 }
 

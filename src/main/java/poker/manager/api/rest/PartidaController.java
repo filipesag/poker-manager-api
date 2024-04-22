@@ -91,4 +91,6 @@ public class PartidaController {
         partidaService.finalizarPartida(partida);
         return ResponseEntity.noContent().build();
     }
+
+
 }

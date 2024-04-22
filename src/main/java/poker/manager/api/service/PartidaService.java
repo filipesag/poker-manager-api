@@ -91,7 +91,7 @@ public class PartidaService {
         return partida;
     }
 
-    public Partida findByStatusInciada() {
+    public Partida buscaPorStatusIniciada() {
         Partida partida = partidaRepository.findByStatusInciada();
         return partida;
     }
@@ -105,5 +105,10 @@ public class PartidaService {
     public void finalizarPartida(Partida partida) {
         partida.setStatus(PartidaStatus.FINALIZADA);
         partidaRepository.save(partida);
+    }
+
+    public Partida buscaPorStatusFinalizada() {
+        Partida partida = partidaRepository.findByStatusFinalizada();
+        return partida;
     }
 }

@@ -13,6 +13,7 @@ import poker.manager.api.domain.Partida;
 import poker.manager.api.domain.Usuario;
 import poker.manager.api.domain.UsuarioPartida;
 import poker.manager.api.dto.NovoUsuarioDTO;
+import poker.manager.api.dto.PartidaDTO;
 import poker.manager.api.dto.UsuarioDTO;
 import poker.manager.api.dto.UsuarioPartidaDTO;
 import poker.manager.api.service.UsuarioPartidaService;
@@ -89,4 +90,6 @@ public class UsuarioController {
         }
         return ResponseEntity.noContent().build();
     }
+
+
 }
