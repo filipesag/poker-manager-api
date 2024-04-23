@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import poker.manager.api.domain.Partida;
 import poker.manager.api.domain.Usuario;
 import poker.manager.api.domain.UsuarioPartida;
+import poker.manager.api.domain.enums.PartidaStatus;
 import poker.manager.api.dto.PartidaDTO;
 import poker.manager.api.dto.UsuarioPartidaDTO;
 import poker.manager.api.repository.PartidaRepository;
@@ -31,19 +32,21 @@ public class UsuarioPartidaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public UsuarioPartida confirmarPresenca(Partida partida, Usuario usuario) {
-        usuario = usuarioRepository.getReferenceById(usuario.getId());
-        partida = partidaRepository.getReferenceById(partida.getId());
+    public void confirmarPresenca(Partida partida, Usuario usuario) {
         UsuarioPartida usuarioPartida = new UsuarioPartida();
         usuarioPartida.setPartida(partida);
         usuarioPartida.setUsuario(usuario);
-        if(usuarioPartida.getUsuario().getId().equals(partida.getUsuarioAnfitriaoId())){
+        usuarioPartida.setRebuy(false);
+        usuarioPartida.setFichasFinal(0);
+        usuarioPartida.setNetProFit(0.0);
+        usuarioPartida.setColocacao(0);
+        usuarioPartida.setCancelado(false);
+        if(usuario.getId().equals(partida.getUsuarioAnfitriaoId())){
             usuarioPartida.setAnfitriao(true);
+        }else {
+            usuarioPartida.setAnfitriao(false);
         }
         usuarioPartidaRepository.save(usuarioPartida);
-        usuarioRepository.save(usuario);
-        partidaRepository.save(partida);
-        return usuarioPartida;
     }
 
     public void cancelarPresenca(Usuario usuario, Integer partidaId) {

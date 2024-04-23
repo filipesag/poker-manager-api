@@ -48,17 +48,14 @@ public class PartidaService {
     }
 
     public void cadastrarAnfitriao(Partida partida) {
-        Partida partidaASerCriada = new Partida();
-        partidaASerCriada = partidaRepository.getReferenceById(partida.getId());
-        partidaASerCriada.setUsuarioAnfitriaoId(partida.getUsuarioAnfitriaoId());
-        partidaASerCriada.setStatus(PartidaStatus.ABERTA);
-        partidaASerCriada.setQuantidadeJogadores(partida.getQuantidadeJogadores());
-        Usuario anfitriao = usuarioRepository.findById(partidaASerCriada.getUsuarioAnfitriaoId()).get();
-        UsuarioPartida usuarioPartida = new UsuarioPartida();
-        usuarioPartida.setUsuario(anfitriao);
-        partidaRepository.save(partidaASerCriada);
-        usuarioPartida = usuarioPartidaService.confirmarPresenca(partidaASerCriada, anfitriao);
-        usuarioPartidaRepository.save(usuarioPartida);
+        Partida partidaAtual = partidaRepository.getReferenceById(partida.getId());
+        partidaAtual.setStatus(PartidaStatus.ABERTA);
+        partidaAtual.setBucketPorPessoa(partida.getBucketPorPessoa());
+        partidaAtual.setQuantidadeJogadores(partida.getQuantidadeJogadores());
+        partidaAtual.setUsuarioAnfitriaoId(partida.getUsuarioAnfitriaoId());
+        partidaRepository.save(partidaAtual);
+        Usuario usuario = usuarioRepository.getReferenceById(partidaAtual.getUsuarioAnfitriaoId());
+        usuarioPartidaService.confirmarPresenca(partidaAtual, usuario);
     }
 
     public void anfitriaoCancelado(Partida partida) {
