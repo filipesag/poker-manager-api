@@ -3,6 +3,7 @@ package poker.manager.api.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import org.flywaydb.core.internal.util.BooleanEvaluator;
 import poker.manager.api.dto.UsuarioPartidaDTO;
 
 import java.io.Serializable;
@@ -39,20 +40,22 @@ public class UsuarioPartida implements Serializable {
     public UsuarioPartida() {
     }
 
-    public UsuarioPartida(Partida partida, Usuario usuario, UsuarioPartidaDTO usuarioPartidaDTO) {
+    public UsuarioPartida(Partida partida, Usuario usuario, Boolean isRebuy, Integer colocacao, Double netProFit
+    ,Integer fichasFinal, Boolean isAnfitriao, Boolean isCancelado) {
         this.partida = partida;
         this.usuario = usuario;
-        this.isRebuy = usuarioPartidaDTO.isRebuy();
-        this.colocacao = usuarioPartidaDTO.colocacao();
-        this.netProFit = usuarioPartidaDTO.netProFit();
-        this.fichasFinal = usuarioPartidaDTO.fichasFinal();
-        this.isAnfitriao = usuarioPartidaDTO.isAnfitriao();
-        this.isCancelado = usuarioPartidaDTO.isCancelado();
+        this.isRebuy = isRebuy;
+        this.colocacao = colocacao;
+        this.netProFit = netProFit;
+        this.fichasFinal = fichasFinal;
+        this.isAnfitriao = isAnfitriao;
+        this.isCancelado = isCancelado;
     }
 
     public UsuarioPartida(Partida partida, Usuario usuario) {
         this.partida = partida;
         this.usuario = usuario;
+        this.id = new UsuarioPartidaId(usuario.getId(), partida.getId());
     }
 
     public Boolean getRebuy() {

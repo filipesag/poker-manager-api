@@ -33,9 +33,7 @@ public class UsuarioPartidaService {
     private UsuarioRepository usuarioRepository;
 
     public void confirmarPresenca(Partida partida, Usuario usuario) {
-        UsuarioPartida usuarioPartida = new UsuarioPartida();
-        usuarioPartida.setPartida(partida);
-        usuarioPartida.setUsuario(usuario);
+        UsuarioPartida usuarioPartida = new UsuarioPartida(partida, usuario);
         usuarioPartida.setRebuy(false);
         usuarioPartida.setFichasFinal(0);
         usuarioPartida.setNetProFit(0.0);

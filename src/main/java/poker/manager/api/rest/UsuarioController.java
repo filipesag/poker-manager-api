@@ -77,7 +77,7 @@ public class UsuarioController {
         Usuario usuario = new Usuario(usuarioDTO);
         Set<UsuarioPartida> matches = usuario.getPartidas();
         for(UsuarioPartida x : matches) {
-            if(x.getPartida().getStatus().toString() == "INICIADA") {
+            if(x.getPartida().getStatus().toString() == "FINALIZADA") {
                 UsuarioPartida usuarioPartida = new UsuarioPartida(x.getPartida(), usuario);
                 usuarioPartida.setCancelado(x.getCancelado());
                 usuarioPartida.setRebuy(x.getRebuy());
