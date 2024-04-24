@@ -104,6 +104,11 @@ public class PartidaService {
         partidaRepository.save(partida);
     }
 
+    public void fecharPartida(Partida partida) {
+        partida.setStatus(PartidaStatus.FECHADA);
+        partidaRepository.save(partida);
+    }
+
     public Partida buscaPorStatusFinalizada() {
         Partida partida = partidaRepository.findByStatusFinalizada();
         return partida;

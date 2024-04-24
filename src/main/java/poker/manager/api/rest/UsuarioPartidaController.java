@@ -14,6 +14,7 @@ import poker.manager.api.service.UsuarioPartidaService;
 import poker.manager.api.domain.UsuarioPartida;
 import poker.manager.api.service.UsuarioService;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 
@@ -67,6 +68,7 @@ public class UsuarioPartidaController {
         sortedPlayers.sort(Comparator.comparingDouble(UsuarioPartida::getNetProFit).reversed());
         Double netProFit;
         for(UsuarioPartida x : players) {
+            DecimalFormat df = new DecimalFormat("#.00");
             Double valorPorUnidade = valorDoPote/fichasTotais;
             Double profit = valorPorUnidade * x.getFichasFinal();
             if(x.getRebuy() == true) {
@@ -74,7 +76,7 @@ public class UsuarioPartidaController {
             }else {
                 netProFit = profit - (partida.getBucketPorPessoa());
             }
-            x.setNetProFit(Math.round(netProFit * 100.0) / 100.0);
+            x.setNetProFit(Math.round(netProFit*100.0)/100.0);
             usuarioPartidaService.inserirDadosFimDaPartida(x);
         }
         int colocacao = 1;
@@ -82,6 +84,7 @@ public class UsuarioPartidaController {
             player.setColocacao(colocacao++);
             usuarioPartidaService.inserirDadosFimDaPartida(player);
         }
+        partidaService.fecharPartida(partida);
         return ResponseEntity.noContent().build();
     }
 
