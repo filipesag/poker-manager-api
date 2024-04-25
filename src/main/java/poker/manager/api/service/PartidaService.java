@@ -13,6 +13,7 @@ import poker.manager.api.repository.PartidaRepository;
 import poker.manager.api.repository.UsuarioPartidaRepository;
 import poker.manager.api.repository.UsuarioRepository;
 import poker.manager.api.domain.Partida;
+import poker.manager.api.service.exceptions.PartidaUnableToUpdateException;
 import poker.manager.api.service.exceptions.PartidaWithNoHostException;
 
 import java.util.HashSet;
@@ -98,7 +99,7 @@ public class PartidaService {
         if(isAnfitriaoNaoDefinido()) {
             throw new PartidaWithNoHostException();
         }
-       Partida partida = partidaRepository.findByStatusAberta();
+        Partida partida = partidaRepository.findByStatusAberta();
         return partida;
     }
 
@@ -114,11 +115,17 @@ public class PartidaService {
     }
 
     public void finalizarPartida(Partida partida) {
+        if(partida.getStatus() == PartidaStatus.CANCELADA || partida.getStatus() == PartidaStatus.FECHADA) {
+            throw new PartidaUnableToUpdateException();
+        }
         partida.setStatus(PartidaStatus.FINALIZADA);
         partidaRepository.save(partida);
     }
 
     public void fecharPartida(Partida partida) {
+        if(partida.getStatus() == PartidaStatus.CANCELADA || partida.getStatus() == PartidaStatus.FECHADA) {
+            throw new PartidaUnableToUpdateException();
+        }
         partida.setStatus(PartidaStatus.FECHADA);
         partidaRepository.save(partida);
     }

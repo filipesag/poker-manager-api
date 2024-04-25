@@ -1,6 +1,7 @@
 package poker.manager.api.rest;
 
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import poker.manager.api.domain.Partida;
@@ -34,7 +35,7 @@ public class PartidaController {
 
 
     @PostMapping(value = "/creation")
-    public ResponseEntity<Partida> criarNovaPartida(@RequestBody PartidaDTO partidaDTO) {
+    public ResponseEntity<Partida> criarNovaPartida(@RequestBody @Valid PartidaDTO partidaDTO) {
         Partida partida = new Partida(partidaDTO);
         partida = partidaService.criarPartida(partida);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(partida.getId()).toUri();
