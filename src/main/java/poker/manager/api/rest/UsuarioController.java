@@ -9,19 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import poker.manager.api.domain.Partida;
 import poker.manager.api.domain.Usuario;
 import poker.manager.api.domain.UsuarioPartida;
 import poker.manager.api.dto.NovoUsuarioDTO;
-import poker.manager.api.dto.PartidaDTO;
 import poker.manager.api.dto.UsuarioDTO;
-import poker.manager.api.dto.UsuarioPartidaDTO;
 import poker.manager.api.service.UsuarioPartidaService;
 import poker.manager.api.service.UsuarioService;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 

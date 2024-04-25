@@ -1,10 +1,7 @@
 package poker.manager.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import org.flywaydb.core.internal.util.BooleanEvaluator;
-import poker.manager.api.dto.UsuarioPartidaDTO;
 
 import java.io.Serializable;
 import java.util.Objects;

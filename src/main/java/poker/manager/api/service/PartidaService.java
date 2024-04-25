@@ -3,6 +3,7 @@ package poker.manager.api.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import poker.manager.api.domain.Usuario;
 import poker.manager.api.domain.UsuarioPartida;
@@ -12,6 +13,7 @@ import poker.manager.api.repository.PartidaRepository;
 import poker.manager.api.repository.UsuarioPartidaRepository;
 import poker.manager.api.repository.UsuarioRepository;
 import poker.manager.api.domain.Partida;
+import poker.manager.api.service.exceptions.PartidaWithNoHostException;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -83,7 +85,19 @@ public class PartidaService {
         partidaRepository.save(partida);
     }
 
+    public Boolean isAnfitriaoNaoDefinido() {
+        Partida partida  = partidaRepository.findByStatusAguardandoAnfitriao();
+        if(partida == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public Partida buscarPorStatusAberta(){
+        if(isAnfitriaoNaoDefinido()) {
+            throw new PartidaWithNoHostException();
+        }
        Partida partida = partidaRepository.findByStatusAberta();
         return partida;
     }

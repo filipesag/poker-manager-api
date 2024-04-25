@@ -5,16 +5,13 @@ import org.springframework.stereotype.Service;
 import poker.manager.api.domain.Partida;
 import poker.manager.api.domain.Usuario;
 import poker.manager.api.domain.UsuarioPartida;
-import poker.manager.api.domain.enums.PartidaStatus;
-import poker.manager.api.dto.PartidaDTO;
-import poker.manager.api.dto.UsuarioPartidaDTO;
 import poker.manager.api.repository.PartidaRepository;
 import poker.manager.api.repository.UsuarioPartidaRepository;
 import poker.manager.api.repository.UsuarioRepository;
+import poker.manager.api.service.exceptions.PartidaFullException;
+import poker.manager.api.service.exceptions.PartidaWithNoHostException;
+import poker.manager.api.service.exceptions.UsuarioAlreadyInMatchException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -33,17 +30,20 @@ public class UsuarioPartidaService {
     private UsuarioRepository usuarioRepository;
 
     public void confirmarPresenca(Partida partida, Usuario usuario) {
+        if (isPartidaLotada(partida)) {
+            throw new PartidaFullException();
+        }
+        if (isUsuarioJaConfirmado(partida, usuario)) {
+            throw new UsuarioAlreadyInMatchException();
+        }
+
         UsuarioPartida usuarioPartida = new UsuarioPartida(partida, usuario);
         usuarioPartida.setRebuy(false);
         usuarioPartida.setFichasFinal(0);
         usuarioPartida.setNetProFit(0.0);
         usuarioPartida.setColocacao(0);
         usuarioPartida.setCancelado(false);
-        if(usuario.getId().equals(partida.getUsuarioAnfitriaoId())){
-            usuarioPartida.setAnfitriao(true);
-        }else {
-            usuarioPartida.setAnfitriao(false);
-        }
+        usuarioPartida.setAnfitriao(usuario.getId().equals(partida.getUsuarioAnfitriaoId()));
         usuarioPartidaRepository.save(usuarioPartida);
     }
 
@@ -86,5 +86,26 @@ public class UsuarioPartidaService {
     public Set<UsuarioPartida> findByIdPartida(Integer id) {
         Set<UsuarioPartida> players = usuarioPartidaRepository.findByIdPartida(id);
         return players;
+    }
+
+    public Boolean isPartidaLotada(Partida partida) {
+        Integer quantidadeDeJogadores = partida.getQuantidadeJogadores();
+        Integer numeroDeJogadaoresNaMesa = obterJogadoresDePartida(partida.getId()).size();
+        if (numeroDeJogadaoresNaMesa < quantidadeDeJogadores) {
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    public Boolean isUsuarioJaConfirmado(Partida partida, Usuario usuario) {
+        boolean isInscrito = false;
+        Set<UsuarioPartida> jogadores = partida.getJogadores();
+        for (UsuarioPartida x : jogadores) {
+            if(x.getUsuario().getId().equals(usuario.getId())) {
+                isInscrito = true;
+            }
+        }
+        return isInscrito;
     }
 }

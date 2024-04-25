@@ -15,4 +15,7 @@ public interface PartidaRepository extends JpaRepository<Partida, Integer> {
 
     @Query(value = "SELECT * FROM PARTIDA p WHERE p.status = 'FINALIZADA'", nativeQuery = true)
     Partida findByStatusFinalizada();
+
+    @Query(value = "SELECT * FROM PARTIDA p WHERE p.status = 'AGUARDANDO_ANFITRIAO'", nativeQuery = true)
+    Partida findByStatusAguardandoAnfitriao();
 }

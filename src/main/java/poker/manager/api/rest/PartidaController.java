@@ -1,31 +1,19 @@
 package poker.manager.api.rest;
 
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import jakarta.transaction.Transactional;
-import org.apache.tomcat.util.json.JSONParser;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import poker.manager.api.domain.Partida;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import poker.manager.api.domain.Usuario;
-import poker.manager.api.domain.UsuarioPartida;
 import poker.manager.api.dto.PartidaDTO;
-import poker.manager.api.dto.UsuarioDTO;
-import poker.manager.api.dto.UsuarioPartidaDTO;
 import poker.manager.api.service.PartidaService;
 import poker.manager.api.service.UsuarioPartidaService;
 
 import java.net.URI;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/match")

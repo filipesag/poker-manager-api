@@ -1,18 +1,16 @@
 package poker.manager.api.rest;
 
-import jakarta.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import poker.manager.api.domain.Partida;
 import poker.manager.api.domain.Usuario;
-import poker.manager.api.dto.PartidaDTO;
 import poker.manager.api.dto.UsuarioDTO;
-import poker.manager.api.dto.UsuarioPartidaDTO;
 import poker.manager.api.service.PartidaService;
 import poker.manager.api.service.UsuarioPartidaService;
 import poker.manager.api.domain.UsuarioPartida;
 import poker.manager.api.service.UsuarioService;
+import poker.manager.api.service.exceptions.PartidaWithNoHostException;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -43,9 +41,7 @@ public class UsuarioPartidaController {
         Partida partida = partidaService.buscarPorStatusAberta();
         Integer quantidadeDeJogadores = partida.getQuantidadeJogadores();
         Integer numeroDeJogadaoresNaMesa = usuarioPartidaService.obterJogadoresDePartida(partida.getId()).size();
-        if (numeroDeJogadaoresNaMesa < quantidadeDeJogadores) {
-            usuarioPartidaService.confirmarPresenca(partida, usuario);
-        }
+        usuarioPartidaService.confirmarPresenca(partida, usuario);
         return ResponseEntity.noContent().build();
     }
 
