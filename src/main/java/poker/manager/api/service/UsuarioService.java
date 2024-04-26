@@ -9,6 +9,7 @@ import poker.manager.api.domain.Partida;
 import poker.manager.api.domain.Usuario;
 import poker.manager.api.domain.UsuarioPartida;
 import poker.manager.api.repository.UsuarioRepository;
+import poker.manager.api.service.exceptions.UsuarioUsernameUsedByAnotherUserException;
 
 import java.util.Optional;
 import java.util.Set;
@@ -29,6 +30,10 @@ public class UsuarioService {
     }
 
     public Usuario inserirNovoUsuario(Usuario usuario){
+        Optional<Usuario> usernameWithUsername = usuarioRepository.findByUsername(usuario.getUsername());
+        if(!usernameWithUsername.isEmpty()) {
+            throw new UsuarioUsernameUsedByAnotherUserException();
+        }
         usuario.setPassword(encoder.encode(usuario.getPassword()));
         usuario = usuarioRepository.save(usuario);
         return usuario;
@@ -42,6 +47,10 @@ public class UsuarioService {
     }
 
     public void atualizarDados(Usuario oldUser,Usuario newUser){
+        Optional<Usuario> usernameWithUsername = usuarioRepository.findByUsername(newUser.getUsername());
+        if(!usernameWithUsername.isEmpty()) {
+            throw new UsuarioUsernameUsedByAnotherUserException();
+        }
         oldUser.setNome(newUser.getNome());
         oldUser.setUsername(newUser.getUsername());
         oldUser.setPassword(encoder.encode(newUser.getPassword()));

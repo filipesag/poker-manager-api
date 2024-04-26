@@ -65,7 +65,6 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
-
     @PutMapping(value = "/set/closed-match")
     public ResponseEntity<UsuarioPartida> inserirDadosPartidaFechada(@RequestBody UsuarioDTO usuarioDTO) {
         Usuario usuario = new Usuario(usuarioDTO);
@@ -77,7 +76,6 @@ public class UsuarioController {
                 usuarioPartida.setRebuy(x.getRebuy());
                 usuarioPartida.setAnfitriao(x.getAnfitriao());
                 usuarioPartida.setFichasFinal(x.getFichasFinal());
-                System.out.println(x.getFichasFinal());
                 usuarioPartida.setNetProFit(x.getNetProFit());
                 usuarioPartida.setId(x.getId());
                 usuarioPartidaService.inserirDadosFimDaPartida(usuarioPartida);
@@ -85,6 +83,4 @@ public class UsuarioController {
         }
         return ResponseEntity.noContent().build();
     }
-
-
 }

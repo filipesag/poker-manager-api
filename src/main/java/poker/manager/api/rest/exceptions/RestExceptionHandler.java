@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import poker.manager.api.service.exceptions.PartidaFullException;
-import poker.manager.api.service.exceptions.PartidaUnableToUpdateException;
-import poker.manager.api.service.exceptions.PartidaWithNoHostException;
-import poker.manager.api.service.exceptions.UsuarioAlreadyInMatchException;
+import poker.manager.api.service.exceptions.*;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -50,7 +47,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(UsuarioAlreadyInMatchException.class)
-    private ResponseEntity<RestErrorMessage> UsuarioAlreadyInMatchHandler(UsuarioAlreadyInMatchException exception, HttpServletRequest request) {
+    private ResponseEntity<RestErrorMessage> usuarioAlreadyInMatchHandler(UsuarioAlreadyInMatchException exception, HttpServletRequest request) {
         HttpStatus internalServerError = HttpStatus.INTERNAL_SERVER_ERROR;
         String errorMsg = "INTERNAL_SERVER_ERROR";
         RestErrorMessage treatedResponse = new RestErrorMessage(
@@ -63,7 +60,20 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(PartidaUnableToUpdateException.class)
-    private ResponseEntity<RestErrorMessage> PartidaUnableToUpdateHandler(PartidaUnableToUpdateException exception, HttpServletRequest request) {
+    private ResponseEntity<RestErrorMessage> partidaUnableToUpdateHandler(PartidaUnableToUpdateException exception, HttpServletRequest request) {
+        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        String errorMsg = "BAD_REQUEST";
+        RestErrorMessage treatedResponse = new RestErrorMessage(
+                ZonedDateTime.now(ZoneId.of("Z")),
+                badRequest.value(),
+                errorMsg,
+                exception.getMessage(),
+                request.getRequestURI());
+        return ResponseEntity.status(badRequest).body(treatedResponse);
+    }
+
+    @ExceptionHandler(UsuarioUsernameUsedByAnotherUserException.class)
+    private ResponseEntity<RestErrorMessage> usuarioUsernameUsedByAnotherUserHandler(UsuarioUsernameUsedByAnotherUserException exception, HttpServletRequest request) {
         HttpStatus badRequest = HttpStatus.BAD_REQUEST;
         String errorMsg = "BAD_REQUEST";
         RestErrorMessage treatedResponse = new RestErrorMessage(
