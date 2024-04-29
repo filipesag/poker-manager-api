@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import poker.manager.api.domain.Partida;
 import poker.manager.api.domain.Usuario;
 import poker.manager.api.domain.UsuarioPartida;
@@ -31,7 +32,7 @@ public class UsuarioService {
 
     public Usuario inserirNovoUsuario(Usuario usuario){
         Optional<Usuario> usernameWithUsername = usuarioRepository.findByUsername(usuario.getUsername());
-        if(!usernameWithUsername.isEmpty()) {
+        if (!usernameWithUsername.isEmpty()) {
             throw new UsuarioUsernameUsedByAnotherUserException();
         }
         usuario.setPassword(encoder.encode(usuario.getPassword()));
@@ -39,16 +40,16 @@ public class UsuarioService {
         return usuario;
     }
 
-    public Usuario atualizarUsuario(Usuario oldUser){
-        Usuario NewUser = usuarioRepository.getReferenceById(oldUser.getId());
-        atualizarDados(NewUser, oldUser);
+    public Usuario atualizarUsuario(Usuario user){
+        Usuario NewUser = usuarioRepository.getReferenceById(user.getId());
+        atualizarDados(NewUser, user);
         usuarioRepository.save(NewUser);
         return NewUser;
     }
 
     public void atualizarDados(Usuario oldUser,Usuario newUser){
-        Optional<Usuario> usernameWithUsername = usuarioRepository.findByUsername(newUser.getUsername());
-        if(!usernameWithUsername.isEmpty()) {
+        Optional<Usuario> userWithUsername = usuarioRepository.findByUsername(newUser.getUsername());
+        if(!userWithUsername.isEmpty()) {
             throw new UsuarioUsernameUsedByAnotherUserException();
         }
         oldUser.setNome(newUser.getNome());

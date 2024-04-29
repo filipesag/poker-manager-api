@@ -47,15 +47,14 @@ public class UsuarioPartidaService {
         usuarioPartidaRepository.save(usuarioPartida);
     }
 
-    public void cancelarPresenca(Usuario usuario, Integer partidaId) {
-        Partida partida = partidaRepository.getReferenceById(partidaId);
+    public void cancelarPresenca(Partida partida, Usuario usuario) {
         UsuarioPartida usuarioPartida = usuarioPartidaRepository.findByIdUsuarioAndIdPartida(partida.getId(),usuario.getId());
-        if (partida.getUsuarioAnfitriaoId() == usuarioPartida.getUsuario().getId()) {
-            partidaService.anfitriaoCancelado(partida);
-            usuarioPartida.setAnfitriao(false);
-        }
+        usuarioPartida.setAnfitriao(false);
         usuarioPartida.setCancelado(true);
         usuarioPartidaRepository.save(usuarioPartida);
+        if (partida.getUsuarioAnfitriaoId().equals(usuario.getId())) {
+            partidaService.anfitriaoCancelado(partida);
+        }
     }
 
     public Set<UsuarioPartida> obterJogadoresDePartida(Integer partidaId) {

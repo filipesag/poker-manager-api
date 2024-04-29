@@ -39,8 +39,6 @@ public class UsuarioPartidaController {
     public ResponseEntity<Partida> confirmarPresenca(@RequestBody UsuarioDTO usuarioDTO){
         Usuario usuario = new Usuario(usuarioDTO);
         Partida partida = partidaService.buscarPorStatusAberta();
-        Integer quantidadeDeJogadores = partida.getQuantidadeJogadores();
-        Integer numeroDeJogadaoresNaMesa = usuarioPartidaService.obterJogadoresDePartida(partida.getId()).size();
         usuarioPartidaService.confirmarPresenca(partida, usuario);
         return ResponseEntity.noContent().build();
     }
@@ -49,8 +47,7 @@ public class UsuarioPartidaController {
     public ResponseEntity<Partida> cancelarPresenca(@RequestBody UsuarioDTO usuarioDTO) {
         Usuario usuario = new Usuario(usuarioDTO);
         Partida partida = partidaService.buscarPorStatusAberta();
-        Integer partidaId = partida.getId();
-        usuarioPartidaService.cancelarPresenca(usuario, partidaId);
+        usuarioPartidaService.cancelarPresenca(partida, usuario);
         return ResponseEntity.noContent().build();
     }
 
