@@ -41,15 +41,15 @@ public class UsuarioService {
     }
 
     public Usuario atualizarUsuario(Usuario user){
-        Usuario NewUser = usuarioRepository.getReferenceById(user.getId());
-        atualizarDados(NewUser, user);
-        usuarioRepository.save(NewUser);
-        return NewUser;
+        Optional<Usuario> newUser = usuarioRepository.findById(user.getId());
+        atualizarDados(newUser.get(), user);
+        usuarioRepository.save(newUser.get());
+        return newUser.get();
     }
 
     public void atualizarDados(Usuario oldUser,Usuario newUser){
         Optional<Usuario> userWithUsername = usuarioRepository.findByUsername(newUser.getUsername());
-        if(!userWithUsername.isEmpty()) {
+        if(userWithUsername.isPresent() && userWithUsername.get().getId() != oldUser.getId()) {
             throw new UsuarioUsernameUsedByAnotherUserException();
         }
         oldUser.setNome(newUser.getNome());

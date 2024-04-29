@@ -114,10 +114,8 @@ public class PartidaTest {
     public void testCancelHostAttendSuccessfuly() {
         partida.setStatus(PartidaStatus.ABERTA);
         partida.setUsuarioAnfitriaoId(1);
-        Usuario usuario = new Usuario(new UsuarioDTO(1,"User Test","usertest","pix@gmail.com","Rua Test 123", UserRole.USER, true, null));
         given(repository.save(partida)).willReturn(partida);
 
-        usuarioPartidaService.cancelarPresenca(partida,usuario);
         service.anfitriaoCancelado(partida);
 
         assertNotNull(partida);

@@ -1,4 +1,5 @@
 package poker.manager.api;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,12 +11,12 @@ import poker.manager.api.domain.Usuario;
 import poker.manager.api.domain.UsuarioPartida;
 import poker.manager.api.domain.enums.UserRole;
 import poker.manager.api.dto.NovoUsuarioDTO;
+import poker.manager.api.dto.UsuarioDTO;
 import poker.manager.api.repository.UsuarioRepository;
 import poker.manager.api.service.UsuarioService;
 import org.junit.jupiter.api.Test;
 import poker.manager.api.service.exceptions.UsuarioUsernameUsedByAnotherUserException;
-
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
@@ -61,6 +62,33 @@ public class UsuarioTest {
     }
 
     @Test
+    @DisplayName("Atualizando novo usuário com sucesso")
+    public void testUpdateNewUserSuccessfuly() {
+        NovoUsuarioDTO novoUsuarioDTO2 = new NovoUsuarioDTO(1, "User Test Updated", "usertest", "123456", "test@pix.com.br", "Rua test 123", true, UserRole.USER, usuarioPartida);
+        Usuario usuario2 = new Usuario(novoUsuarioDTO2);
+        given(repository.findByUsername(anyString())).willReturn(Optional.of(usuario));
+        given(repository.save(usuario2)).willReturn(usuario2);
+        given(repository.findById(1)).willReturn(Optional.of(usuario2));
+
+        Usuario novoUsuarioUpdated = service.atualizarUsuario(usuario2);
+
+        assertNotNull(novoUsuarioUpdated);
+        assertEquals("User Test Updated", novoUsuarioUpdated.getNome());
+    }
+
+    @Test
+    @DisplayName("Atualizando novo usuário com username cadastrado")
+    public void testUpdateNewUserWithUsernameInUse() {
+        NovoUsuarioDTO novoUsuarioDTO2 = new NovoUsuarioDTO(2, "User Test Two", "usertest", "123456", "test@pix.com.br", "Rua test 123", true, UserRole.USER, usuarioPartida);
+        Usuario usuario2 = new Usuario(novoUsuarioDTO2);
+        given(repository.findByUsername(usuario2.getUsername())).willReturn(Optional.of(usuario2));
+
+        assertThrows(UsuarioUsernameUsedByAnotherUserException.class, () -> {
+            service.atualizarDados(usuario, usuario2);
+        });
+    }
+
+    @Test
     @DisplayName("Criando novo usuário com username já cadastrado")
     public void testCreateNewUserWithUsernameInUse() {
         given(repository.findByUsername(anyString())).willReturn(Optional.of(usuario));
@@ -68,6 +96,20 @@ public class UsuarioTest {
             Usuario novoUsuario = service.inserirNovoUsuario(usuario);
         });
         verify(repository, never()).save(any(Usuario.class));
+    }
+
+    @Test
+    @DisplayName("Busca todos em partida iniciada")
+    public void testFindAllInStartedMatchSuccessfuly() {
+        Set<UsuarioPartida> usuarioPartida2 = new HashSet<>();
+        Usuario usuario2 = new Usuario(new UsuarioDTO(2,"User Test Two", "usertesttwo", "pix2@hotmail.com", "Rua test2 123", UserRole.USER,true, usuarioPartida2));
+        given(repository.findAllInMatchStarted()).willReturn(Set.of(usuario, usuario2));
+
+        Set<Usuario> players = service.buscaTodosEmPartidaIniciada();
+
+        assertNotNull(players);
+        assertEquals(2, players.size());
+        verify(repository, times(1)).findAllInMatchStarted();
     }
 
 
