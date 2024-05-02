@@ -8,12 +8,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import poker.manager.api.domain.Partida;
-import poker.manager.api.domain.Usuario;
 import poker.manager.api.domain.UsuarioPartida;
 import poker.manager.api.domain.enums.PartidaStatus;
-import poker.manager.api.domain.enums.UserRole;
 import poker.manager.api.dto.PartidaDTO;
-import poker.manager.api.dto.UsuarioDTO;
 import poker.manager.api.repository.PartidaRepository;
 import poker.manager.api.repository.UsuarioPartidaRepository;
 import poker.manager.api.repository.UsuarioRepository;
@@ -23,12 +20,8 @@ import poker.manager.api.service.exceptions.PartidaUnableToUpdateException;
 import poker.manager.api.service.exceptions.PartidaWithNoHostException;
 import java.time.LocalDate;
 import java.util.Set;
-
-import static net.bytebuddy.matcher.ElementMatchers.any;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
-
-
 
 @ExtendWith(MockitoExtension.class)
 public class PartidaTest {
