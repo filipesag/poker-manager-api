@@ -23,6 +23,8 @@ import poker.manager.api.service.exceptions.PartidaUnableToUpdateException;
 import poker.manager.api.service.exceptions.PartidaWithNoHostException;
 import java.time.LocalDate;
 import java.util.Set;
+
+import static net.bytebuddy.matcher.ElementMatchers.any;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
@@ -44,14 +46,16 @@ public class PartidaTest {
 
     private Partida partida;
 
+    private UsuarioPartida usuarioPartida;
+
     private PartidaDTO partidaDTO;
 
-    private Set<UsuarioPartida> usuarioPartida;
+    private Set<UsuarioPartida> setUsuarioPartida;
 
 
     @BeforeEach
     public void setup() {
-        partidaDTO = new PartidaDTO(1,50.0,null,5, LocalDate.of(2024,06,20), null,usuarioPartida);
+        partidaDTO = new PartidaDTO(1,50.0,null,5, LocalDate.of(2024,06,20), null,setUsuarioPartida);
         partida = new Partida(partidaDTO);
     }
 

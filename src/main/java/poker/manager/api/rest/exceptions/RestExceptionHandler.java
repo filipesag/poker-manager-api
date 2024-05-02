@@ -23,8 +23,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(PartidaWithNoHostException.class)
     private ResponseEntity<RestErrorMessage> partidaWithNoHostHandler(PartidaWithNoHostException exception, HttpServletRequest request) {
-        HttpStatus internalServerError = HttpStatus.INTERNAL_SERVER_ERROR;
-        String errorMsg = "INTERNAL_SERVER_ERROR";
+        HttpStatus internalServerError = HttpStatus.BAD_REQUEST;
+        String errorMsg = "BAD_REQUEST";
         RestErrorMessage treatedResponse = new RestErrorMessage(
                 ZonedDateTime.now(ZoneId.of("Z")),
                 internalServerError.value(),
@@ -35,8 +35,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
     @ExceptionHandler(PartidaFullException.class)
     private ResponseEntity<RestErrorMessage> partidaFullHandler(PartidaFullException exception, HttpServletRequest request) {
-        HttpStatus internalServerError = HttpStatus.INTERNAL_SERVER_ERROR;
-        String errorMsg = "INTERNAL_SERVER_ERROR";
+        HttpStatus internalServerError = HttpStatus.BAD_REQUEST;
+        String errorMsg = "BAD_REQUEST";
         RestErrorMessage treatedResponse = new RestErrorMessage(
                 ZonedDateTime.now(ZoneId.of("Z")),
                 internalServerError.value(),
@@ -48,8 +48,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UsuarioAlreadyInMatchException.class)
     private ResponseEntity<RestErrorMessage> usuarioAlreadyInMatchHandler(UsuarioAlreadyInMatchException exception, HttpServletRequest request) {
-        HttpStatus internalServerError = HttpStatus.INTERNAL_SERVER_ERROR;
-        String errorMsg = "INTERNAL_SERVER_ERROR";
+        HttpStatus internalServerError = HttpStatus.BAD_REQUEST;
+        String errorMsg = "BAD_REQUEST";
         RestErrorMessage treatedResponse = new RestErrorMessage(
                 ZonedDateTime.now(ZoneId.of("Z")),
                 internalServerError.value(),

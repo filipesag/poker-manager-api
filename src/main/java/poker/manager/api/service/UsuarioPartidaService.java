@@ -22,10 +22,8 @@ public class UsuarioPartidaService {
     private  UsuarioService usuarioService;
     @Autowired
     private  PartidaService partidaService;
-
     @Autowired
     private PartidaRepository partidaRepository;
-
     @Autowired
     private UsuarioRepository usuarioRepository;
 
