@@ -52,7 +52,7 @@ public class UsuarioTest {
 
 
     @Test
-    @DisplayName("Criando novo usuário com sucesso")
+    @DisplayName("Testando criando novo usuário com sucesso")
     public void testCreateNewUserSuccessfuly() {
         given(repository.findByUsername(anyString())).willReturn(Optional.empty());
         given(repository.save(usuario)).willReturn(usuario);
@@ -62,7 +62,7 @@ public class UsuarioTest {
     }
 
     @Test
-    @DisplayName("Atualizando novo usuário com sucesso")
+    @DisplayName("Testando atualizando novo usuário com sucesso")
     public void testUpdateNewUserSuccessfuly() {
         NovoUsuarioDTO novoUsuarioDTO2 = new NovoUsuarioDTO(1, "User Test Updated", "usertest", "123456", "test@pix.com.br", "Rua test 123", true, UserRole.USER, usuarioPartida);
         Usuario usuario2 = new Usuario(novoUsuarioDTO2);
@@ -77,7 +77,7 @@ public class UsuarioTest {
     }
 
     @Test
-    @DisplayName("Atualizando novo usuário com username cadastrado")
+    @DisplayName("Testando atualizando novo usuário com username cadastrado")
     public void testUpdateNewUserWithUsernameInUse() {
         NovoUsuarioDTO novoUsuarioDTO2 = new NovoUsuarioDTO(2, "User Test Two", "usertest", "123456", "test@pix.com.br", "Rua test 123", true, UserRole.USER, usuarioPartida);
         Usuario usuario2 = new Usuario(novoUsuarioDTO2);
@@ -89,7 +89,7 @@ public class UsuarioTest {
     }
 
     @Test
-    @DisplayName("Criando novo usuário com username já cadastrado")
+    @DisplayName("Testando criando novo usuário com username já cadastrado")
     public void testCreateNewUserWithUsernameInUse() {
         given(repository.findByUsername(anyString())).willReturn(Optional.of(usuario));
         assertThrows(UsuarioUsernameUsedByAnotherUserException.class, () -> {
@@ -99,17 +99,17 @@ public class UsuarioTest {
     }
 
     @Test
-    @DisplayName("Busca todos em partida iniciada")
+    @DisplayName("Testando busca todos em partida iniciada")
     public void testFindAllInStartedMatchSuccessfuly() {
         Set<UsuarioPartida> usuarioPartida2 = new HashSet<>();
         Usuario usuario2 = new Usuario(new UsuarioDTO(2,"User Test Two", "usertesttwo", "pix2@hotmail.com", "Rua test2 123", UserRole.USER,true, usuarioPartida2));
-        given(repository.findAllInMatchStarted()).willReturn(Set.of(usuario, usuario2));
+        given(repository.findAllInStartedMatch()).willReturn(Set.of(usuario, usuario2));
 
         Set<Usuario> players = service.buscaTodosEmPartidaIniciada();
 
         assertNotNull(players);
         assertEquals(2, players.size());
-        verify(repository, times(1)).findAllInMatchStarted();
+        verify(repository, times(1)).findAllInStartedMatch();
     }
 
 

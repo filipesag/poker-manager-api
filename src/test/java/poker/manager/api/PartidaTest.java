@@ -61,7 +61,7 @@ public class PartidaTest {
 
 
     @Test
-    @DisplayName("Nova partida criada com sucesso")
+    @DisplayName("Testando nova partida criada com sucesso")
     public void testNewMatchCreatedSuccessfuly() {
         given(repository.save(partida)).willReturn(partida);
 
@@ -72,7 +72,7 @@ public class PartidaTest {
     }
 
     @Test
-    @DisplayName("Cadastro de anfitrião em partida aberta")
+    @DisplayName("Testando cadastro de anfitrião em partida aberta")
     public void testHostInMatchCreatedSuccessfuly() {
         given(repository.save(partida)).willReturn(partida);
         given(repository.getReferenceById(1)).willReturn(partida);
@@ -86,7 +86,7 @@ public class PartidaTest {
     }
 
     @Test
-    @DisplayName("Partida cancelada com sucesso")
+    @DisplayName("Testando partida cancelada com sucesso")
     public void testCancelMatchSuccessfuly() {
         partida.setStatus(PartidaStatus.AGUARDANDO_ANFITRIAO);
         partida.setUsuarioAnfitriaoId(1);
@@ -100,7 +100,7 @@ public class PartidaTest {
     }
 
     @Test
-    @DisplayName("Partida iniciada com sucesso")
+    @DisplayName("Testando partida iniciada com sucesso")
     public void testStartMatchSuccessfuly() {
         partida.setStatus(PartidaStatus.ABERTA);
         partida.setUsuarioAnfitriaoId(1);
@@ -114,7 +114,7 @@ public class PartidaTest {
     }
 
     @Test
-    @DisplayName("Anfitrião cancelado com sucesso")
+    @DisplayName("Testando anfitrião cancelado com sucesso")
     public void testCancelHostAttendSuccessfuly() {
         partida.setStatus(PartidaStatus.ABERTA);
         partida.setUsuarioAnfitriaoId(1);
@@ -127,7 +127,7 @@ public class PartidaTest {
     }
 
     @Test
-    @DisplayName("Testa se anfitrião está cadastrado")
+    @DisplayName("Testando se anfitrião está cadastrado")
     public void testIfHostIsDefinedTrue() {
         given(repository.findByStatusAguardandoAnfitriao()).willReturn(null);
 
@@ -138,7 +138,7 @@ public class PartidaTest {
     }
 
     @Test
-    @DisplayName("Testa se anfitrião não está cadastrado")
+    @DisplayName("Testando se anfitrião não está cadastrado")
     public void testIfHostIsDefinedFalse() {
         given(repository.findByStatusAguardandoAnfitriao()).willReturn(partida);
 
@@ -149,7 +149,7 @@ public class PartidaTest {
     }
 
     @Test
-    @DisplayName("Busca por partida com status ABERTA retornando-a")
+    @DisplayName("Testando busca por partida com status ABERTA retornando-a")
     public void testFindingOpenedStatusMatchTrue() {
         partida.setStatus(PartidaStatus.ABERTA);
         given(repository.findByStatusAberta()).willReturn(partida);
@@ -161,7 +161,7 @@ public class PartidaTest {
     }
 
     @Test
-    @DisplayName("Busca por partida com status ABERTA lançando exceção")
+    @DisplayName("Testando busca por partida com status ABERTA lançando exceção")
     public void testFindingOpenedStatusMatchFalse() {
         partida.setStatus(PartidaStatus.ABERTA);
         given(repository.findByStatusAguardandoAnfitriao()).willReturn(partida);
@@ -172,7 +172,7 @@ public class PartidaTest {
     }
 
     @Test
-    @DisplayName("Finalizar partida com sucesso")
+    @DisplayName("Testando finalizar partida com sucesso")
     public void testFinishMatchSuccesfully() {
         partida.setStatus(PartidaStatus.ABERTA);
         given(repository.save(partida)).willReturn(partida);
@@ -184,7 +184,7 @@ public class PartidaTest {
     }
 
     @Test
-    @DisplayName("Finalizar partida com status CANCELADA lançando exceção")
+    @DisplayName("Testando finalizar partida com status CANCELADA lançando exceção")
     public void testFinishMatchCancelledException() {
         partida.setStatus(PartidaStatus.CANCELADA);
 
@@ -194,7 +194,7 @@ public class PartidaTest {
     }
 
     @Test
-    @DisplayName("Finalizar partida com status FECHADA lançando exceção")
+    @DisplayName("Testando finalizar partida com status FECHADA lançando exceção")
     public void testFinishMatchClosedException() {
         partida.setStatus(PartidaStatus.FECHADA);
 
@@ -205,7 +205,7 @@ public class PartidaTest {
 
 
     @Test
-    @DisplayName("Fechar partida com sucesso")
+    @DisplayName("Testando fechar partida com sucesso")
     public void testCloseMatchSuccesfully() {
         partida.setStatus(PartidaStatus.ABERTA);
         given(repository.save(partida)).willReturn(partida);
@@ -217,7 +217,7 @@ public class PartidaTest {
     }
 
     @Test
-    @DisplayName("Fechar partida com status FECHADA lançando exceção")
+    @DisplayName("Testando fechar partida com status FECHADA lançando exceção")
     public void testCloseMatchThrowClosedException() {
         partida.setStatus(PartidaStatus.FECHADA);
 
@@ -227,7 +227,7 @@ public class PartidaTest {
     }
 
     @Test
-    @DisplayName("Fechar partida com status CANCELADA lançando exceção")
+    @DisplayName("Testando fechar partida com status CANCELADA lançando exceção")
     public void testCloseMatchThrowCancelledException() {
         partida.setStatus(PartidaStatus.CANCELADA);
 

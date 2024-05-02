@@ -60,7 +60,7 @@ public class UsuarioService {
     }
 
     public Set<Usuario> buscaTodosEmPartidaIniciada() {
-        Set<Usuario> users = usuarioRepository.findAllInMatchStarted();
+        Set<Usuario> users = usuarioRepository.findAllInStartedMatch();
         return users;
     }
 

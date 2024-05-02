@@ -43,8 +43,6 @@ public class UsuarioPartidaTest {
     @Mock
     private PartidaRepository partidaRepository;
 
-    @Mock
-    private PartidaService partidaService;
     @InjectMocks
     private UsuarioPartidaService service;
 
@@ -102,17 +100,14 @@ public class UsuarioPartidaTest {
         });
         verify(repository, never()).save(any(UsuarioPartida.class));
     }
-
 //    @Test
 //    @DisplayName("Testando exceção lançada de usuário já cadastrado em partida")
 //    public void testExceptionThrownWhenUserIsAlreadyInMatch() {
-//        partida.setUsuarioAnfitriaoId(1);
-//
-//        given(service.isUsuarioJaConfirmado(partida, usuario)).willReturn(true);
 //
 //        assertThrows(UsuarioAlreadyInMatchException.class, () -> {
 //            service.confirmarPresenca(partida, usuario);
 //        });
+//
 //        verify(repository, never()).save(any(UsuarioPartida.class));
 //    }
 
@@ -215,6 +210,5 @@ public class UsuarioPartidaTest {
         assertNotNull(usuarioPartida);
         verify(repository).save(usuarioPartida);
     }
-
 
 }

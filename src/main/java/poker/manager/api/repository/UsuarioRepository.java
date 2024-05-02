@@ -24,6 +24,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
             "JOIN usuario_partida up ON u.id = up.usuario_id\n" +
             "JOIN partida p ON up.partida_id = p.id\n" +
             "WHERE p.status = 'INICIADA';", nativeQuery = true)
-    Set<Usuario> findAllInMatchStarted();
+    Set<Usuario> findAllInStartedMatch();
 
 }
