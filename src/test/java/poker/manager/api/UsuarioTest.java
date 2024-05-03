@@ -54,7 +54,7 @@ public class UsuarioTest {
     @Test
     @DisplayName("Testando criando novo usuário com sucesso")
     public void testCreateNewUserSuccessfuly() {
-        given(repository.buscaPorUsername(anyString())).willReturn(Optional.empty());
+        given(repository.findByUsername(anyString())).willReturn(Optional.empty());
         given(repository.save(usuario)).willReturn(usuario);
         Usuario novoUsuario = service.inserirNovoUsuario(usuario);
         assertNotNull(novoUsuario);
@@ -66,7 +66,7 @@ public class UsuarioTest {
     public void testUpdateNewUserSuccessfuly() {
         NovoUsuarioDTO novoUsuarioDTO2 = new NovoUsuarioDTO(1, "User Test Updated", "usertest", "123456", "test@pix.com.br", "Rua test 123", true, UserRole.USER, usuarioPartida);
         Usuario usuario2 = new Usuario(novoUsuarioDTO2);
-        given(repository.buscaPorUsername(anyString())).willReturn(Optional.of(usuario));
+        given(repository.findByUsername(anyString())).willReturn(Optional.of(usuario));
         given(repository.save(usuario2)).willReturn(usuario2);
         given(repository.findById(1)).willReturn(Optional.of(usuario2));
 
@@ -81,7 +81,7 @@ public class UsuarioTest {
     public void testUpdateNewUserWithUsernameInUse() {
         NovoUsuarioDTO novoUsuarioDTO2 = new NovoUsuarioDTO(2, "User Test Two", "usertest", "123456", "test@pix.com.br", "Rua test 123", true, UserRole.USER, usuarioPartida);
         Usuario usuario2 = new Usuario(novoUsuarioDTO2);
-        given(repository.buscaPorUsername(usuario2.getUsername())).willReturn(Optional.of(usuario2));
+        given(repository.findByUsername(usuario2.getUsername())).willReturn(Optional.of(usuario2));
 
         assertThrows(UsuarioUsernameUsedByAnotherUserException.class, () -> {
             service.atualizarDados(usuario, usuario2);
@@ -91,7 +91,7 @@ public class UsuarioTest {
     @Test
     @DisplayName("Testando criando novo usuário com username já cadastrado")
     public void testCreateNewUserWithUsernameInUse() {
-        given(repository.buscaPorUsername(anyString())).willReturn(Optional.of(usuario));
+        given(repository.findByUsername(anyString())).willReturn(Optional.of(usuario));
         assertThrows(UsuarioUsernameUsedByAnotherUserException.class, () -> {
             Usuario novoUsuario = service.inserirNovoUsuario(usuario);
         });

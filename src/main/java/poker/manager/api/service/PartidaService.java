@@ -75,7 +75,7 @@ public class PartidaService {
 
     public void cancelarPartida(Partida partida) {
         partida = partidaRepository.getReferenceById(partida.getId());
-        Set<UsuarioPartida> players = usuarioPartidaRepository.findAllPlayersByMatch(partida.getId());
+        Set<UsuarioPartida> players = usuarioPartidaRepository.buscaTodosJogadoresPorPartida(partida.getId());
         for(UsuarioPartida player:players){
             player.setCancelado(true);
             player.setAnfitriao(false);

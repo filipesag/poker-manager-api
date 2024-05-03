@@ -16,8 +16,8 @@ import java.util.Set;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
-    Page<Usuario> buscaTodosPorIsEnabledTrue(Pageable pageable);
-    Optional<Usuario> buscaPorUsername(String username);
+    Page<Usuario> findAllByIsEnabledTrue(Pageable pageable);
+    Optional<Usuario> findByUsername(String username);
 
     @Query(value = "SELECT u.*\n" +
             "FROM usuario u\n" +
