@@ -129,7 +129,7 @@ public class PartidaTest {
     @Test
     @DisplayName("Testando se anfitrião está cadastrado")
     public void testIfHostIsDefinedTrue() {
-        given(repository.findByStatusAguardandoAnfitriao()).willReturn(null);
+        given(repository.buscaPorStatusAguardandoAnfitriao()).willReturn(null);
 
         boolean isHostDefined = service.isAnfitriaoDefinido();
 
@@ -140,7 +140,7 @@ public class PartidaTest {
     @Test
     @DisplayName("Testando se anfitrião não está cadastrado")
     public void testIfHostIsDefinedFalse() {
-        given(repository.findByStatusAguardandoAnfitriao()).willReturn(partida);
+        given(repository.buscaPorStatusAguardandoAnfitriao()).willReturn(partida);
 
         boolean isHostDefined = service.isAnfitriaoDefinido();
 
@@ -152,8 +152,8 @@ public class PartidaTest {
     @DisplayName("Testando busca por partida com status ABERTA retornando-a")
     public void testFindingOpenedStatusMatchTrue() {
         partida.setStatus(PartidaStatus.ABERTA);
-        given(repository.findByStatusAberta()).willReturn(partida);
-        given(repository.findByStatusAguardandoAnfitriao()).willReturn(null);
+        given(repository.buscaPorStatusAberta()).willReturn(partida);
+        given(repository.buscaPorStatusAguardandoAnfitriao()).willReturn(null);
         Partida openedMatch = service.buscarPorStatusAberta();
 
         assertNotNull(openedMatch);
@@ -164,7 +164,7 @@ public class PartidaTest {
     @DisplayName("Testando busca por partida com status ABERTA lançando exceção")
     public void testFindingOpenedStatusMatchFalse() {
         partida.setStatus(PartidaStatus.ABERTA);
-        given(repository.findByStatusAguardandoAnfitriao()).willReturn(partida);
+        given(repository.buscaPorStatusAguardandoAnfitriao()).willReturn(partida);
 
         assertThrows(PartidaWithNoHostException.class, () -> {
             service.buscarPorStatusAberta();

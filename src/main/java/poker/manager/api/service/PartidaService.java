@@ -30,8 +30,6 @@ public class PartidaService {
     @Autowired
     private PartidaRepository partidaRepository;
     @Autowired
-    private UsuarioService usuarioService;
-    @Autowired
     private UsuarioPartidaService usuarioPartidaService;
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -89,7 +87,7 @@ public class PartidaService {
     }
 
     public Boolean isAnfitriaoDefinido() {
-        Partida partida  = partidaRepository.findByStatusAguardandoAnfitriao();
+        Partida partida  = partidaRepository.buscaPorStatusAguardandoAnfitriao();
         if(partida == null) {
             return true;
         } else {
@@ -101,12 +99,12 @@ public class PartidaService {
         if(!isAnfitriaoDefinido()) {
             throw new PartidaWithNoHostException();
         }
-        Partida partida = partidaRepository.findByStatusAberta();
+        Partida partida = partidaRepository.buscaPorStatusAberta();
         return partida;
     }
 
     public Partida buscaPorStatusIniciada() {
-        Partida partida = partidaRepository.findByStatusInciada();
+        Partida partida = partidaRepository.buscaPorStatusInciada();
         return partida;
     }
 
@@ -133,7 +131,7 @@ public class PartidaService {
     }
 
     public Partida buscaPorStatusFinalizada() {
-        Partida partida = partidaRepository.findByStatusFinalizada();
+        Partida partida = partidaRepository.buscaPorStatusFinalizada();
         return partida;
     }
 }

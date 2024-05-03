@@ -16,14 +16,14 @@ import java.util.Set;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
-    Page<Usuario> findAllByIsEnabledTrue(Pageable pageable);
-    Optional<Usuario> findByUsername(String username);
+    Page<Usuario> buscaTodosPorIsEnabledTrue(Pageable pageable);
+    Optional<Usuario> buscaPorUsername(String username);
 
     @Query(value = "SELECT u.*\n" +
             "FROM usuario u\n" +
             "JOIN usuario_partida up ON u.id = up.usuario_id\n" +
             "JOIN partida p ON up.partida_id = p.id\n" +
             "WHERE p.status = 'INICIADA';", nativeQuery = true)
-    Set<Usuario> findAllInStartedMatch();
+    Set<Usuario> buscaTodosEmPartidaIniciada();
 
 }

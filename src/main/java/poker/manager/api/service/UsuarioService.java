@@ -31,7 +31,7 @@ public class UsuarioService {
     }
 
     public Usuario inserirNovoUsuario(Usuario usuario){
-        Optional<Usuario> usernameWithUsername = usuarioRepository.findByUsername(usuario.getUsername());
+        Optional<Usuario> usernameWithUsername = usuarioRepository.buscaPorUsername(usuario.getUsername());
         if (!usernameWithUsername.isEmpty()) {
             throw new UsuarioUsernameUsedByAnotherUserException();
         }
@@ -48,7 +48,7 @@ public class UsuarioService {
     }
 
     public void atualizarDados(Usuario oldUser,Usuario newUser){
-        Optional<Usuario> userWithUsername = usuarioRepository.findByUsername(newUser.getUsername());
+        Optional<Usuario> userWithUsername = usuarioRepository.buscaPorUsername(newUser.getUsername());
         if(userWithUsername.isPresent() && userWithUsername.get().getId() != oldUser.getId()) {
             throw new UsuarioUsernameUsedByAnotherUserException();
         }
@@ -60,12 +60,12 @@ public class UsuarioService {
     }
 
     public Set<Usuario> buscaTodosEmPartidaIniciada() {
-        Set<Usuario> users = usuarioRepository.findAllInStartedMatch();
+        Set<Usuario> users = usuarioRepository.buscaTodosEmPartidaIniciada();
         return users;
     }
 
-    public Page<Usuario> findAll(Pageable pageable) {
-        return usuarioRepository.findAllByIsEnabledTrue(pageable);
+    public Page<Usuario> buscaTodos(Pageable pageable) {
+        return usuarioRepository.buscaTodosPorIsEnabledTrue(pageable);
     }
 
 }

@@ -26,7 +26,7 @@ public class AuthenticationService {
                 request.getUsername(),
                 request.getPassword()
         ));
-        Usuario usuario = repository.findByUsername(request.getUsername())
+        Usuario usuario = repository.buscaPorUsername(request.getUsername())
                 .orElseThrow();
         String jwtToken = jwtService.generateToken(usuario);
 

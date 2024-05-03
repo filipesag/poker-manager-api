@@ -100,21 +100,11 @@ public class UsuarioPartidaTest {
         });
         verify(repository, never()).save(any(UsuarioPartida.class));
     }
-//    @Test
-//    @DisplayName("Testando exceção lançada de usuário já cadastrado em partida")
-//    public void testExceptionThrownWhenUserIsAlreadyInMatch() {
-//
-//        assertThrows(UsuarioAlreadyInMatchException.class, () -> {
-//            service.confirmarPresenca(partida, usuario);
-//        });
-//
-//        verify(repository, never()).save(any(UsuarioPartida.class));
-//    }
 
     @Test
     @DisplayName("Testando cancelar presença")
     public void testCallOffAtenddanceInMatch() {
-        given(repository.findByIdUsuarioAndIdPartida(partida.getId(), usuario.getId())).willReturn(usuarioPartida);
+        given(repository.buscaPorIdUsuarioAndIdPartida(partida.getId(), usuario.getId())).willReturn(usuarioPartida);
         given(repository.save(usuarioPartida)).willReturn(usuarioPartida);
 
         service.cancelarPresenca(partida, usuario);
@@ -133,7 +123,7 @@ public class UsuarioPartidaTest {
         Usuario usuario3 = new Usuario(usuarioDTO3);
         UsuarioPartida usuarioPartida2 = new UsuarioPartida(partida, usuario2);
         UsuarioPartida usuarioPartida3 = new UsuarioPartida(partida, usuario3);
-        given(repository.findAllPlayersByMatch(partida.getId())).willReturn(Set.of(usuarioPartida, usuarioPartida2, usuarioPartida3));
+        given(repository.buscaTodosJogadoresPorPartida(partida.getId())).willReturn(Set.of(usuarioPartida, usuarioPartida2, usuarioPartida3));
 
         Set<UsuarioPartida> players = service.obterJogadoresDePartida(partida.getId());
 
@@ -153,7 +143,7 @@ public class UsuarioPartidaTest {
         usuarioPartida.setFichasFinal(1000);
         usuarioPartida2.setFichasFinal(700);
         usuarioPartida3.setFichasFinal(780);
-        given(repository.findAllPlayersByMatch(partida.getId())).willReturn(Set.of(usuarioPartida, usuarioPartida2, usuarioPartida3));
+        given(repository.buscaTodosJogadoresPorPartida(partida.getId())).willReturn(Set.of(usuarioPartida, usuarioPartida2, usuarioPartida3));
 
         Integer totalOfCoins = service.calculaFichasTotais(partida.getId());
 
@@ -171,7 +161,7 @@ public class UsuarioPartidaTest {
         UsuarioPartida usuarioPartida2 = new UsuarioPartida(partida, usuario2);
         UsuarioPartida usuarioPartida3 = new UsuarioPartida(partida, usuario3);
 
-        given(repository.findAllPlayersByMatch(partida.getId())).willReturn(Set.of(usuarioPartida, usuarioPartida2, usuarioPartida3));
+        given(repository.buscaTodosJogadoresPorPartida(partida.getId())).willReturn(Set.of(usuarioPartida, usuarioPartida2, usuarioPartida3));
         given(partidaRepository.getReferenceById(partida.getId())).willReturn(partida);
 
         Double totalBucketValue = service.calculaValorDoPote(partida.getId());
@@ -191,7 +181,7 @@ public class UsuarioPartidaTest {
         UsuarioPartida usuarioPartida3 = new UsuarioPartida(partida, usuario3);
         usuarioPartida3.setRebuy(true);
 
-        given(repository.findAllPlayersByMatch(partida.getId())).willReturn(Set.of(usuarioPartida, usuarioPartida2, usuarioPartida3));
+        given(repository.buscaTodosJogadoresPorPartida(partida.getId())).willReturn(Set.of(usuarioPartida, usuarioPartida2, usuarioPartida3));
         given(partidaRepository.getReferenceById(partida.getId())).willReturn(partida);
 
         Double totalBucketValue = service.calculaValorDoPote(partida.getId());

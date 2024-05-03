@@ -54,7 +54,7 @@ public class UsuarioTest {
     @Test
     @DisplayName("Testando criando novo usuário com sucesso")
     public void testCreateNewUserSuccessfuly() {
-        given(repository.findByUsername(anyString())).willReturn(Optional.empty());
+        given(repository.buscaPorUsername(anyString())).willReturn(Optional.empty());
         given(repository.save(usuario)).willReturn(usuario);
         Usuario novoUsuario = service.inserirNovoUsuario(usuario);
         assertNotNull(novoUsuario);
@@ -66,7 +66,7 @@ public class UsuarioTest {
     public void testUpdateNewUserSuccessfuly() {
         NovoUsuarioDTO novoUsuarioDTO2 = new NovoUsuarioDTO(1, "User Test Updated", "usertest", "123456", "test@pix.com.br", "Rua test 123", true, UserRole.USER, usuarioPartida);
         Usuario usuario2 = new Usuario(novoUsuarioDTO2);
-        given(repository.findByUsername(anyString())).willReturn(Optional.of(usuario));
+        given(repository.buscaPorUsername(anyString())).willReturn(Optional.of(usuario));
         given(repository.save(usuario2)).willReturn(usuario2);
         given(repository.findById(1)).willReturn(Optional.of(usuario2));
 
@@ -81,7 +81,7 @@ public class UsuarioTest {
     public void testUpdateNewUserWithUsernameInUse() {
         NovoUsuarioDTO novoUsuarioDTO2 = new NovoUsuarioDTO(2, "User Test Two", "usertest", "123456", "test@pix.com.br", "Rua test 123", true, UserRole.USER, usuarioPartida);
         Usuario usuario2 = new Usuario(novoUsuarioDTO2);
-        given(repository.findByUsername(usuario2.getUsername())).willReturn(Optional.of(usuario2));
+        given(repository.buscaPorUsername(usuario2.getUsername())).willReturn(Optional.of(usuario2));
 
         assertThrows(UsuarioUsernameUsedByAnotherUserException.class, () -> {
             service.atualizarDados(usuario, usuario2);
@@ -91,7 +91,7 @@ public class UsuarioTest {
     @Test
     @DisplayName("Testando criando novo usuário com username já cadastrado")
     public void testCreateNewUserWithUsernameInUse() {
-        given(repository.findByUsername(anyString())).willReturn(Optional.of(usuario));
+        given(repository.buscaPorUsername(anyString())).willReturn(Optional.of(usuario));
         assertThrows(UsuarioUsernameUsedByAnotherUserException.class, () -> {
             Usuario novoUsuario = service.inserirNovoUsuario(usuario);
         });
@@ -103,50 +103,12 @@ public class UsuarioTest {
     public void testFindAllInStartedMatchSuccessfuly() {
         Set<UsuarioPartida> usuarioPartida2 = new HashSet<>();
         Usuario usuario2 = new Usuario(new UsuarioDTO(2,"User Test Two", "usertesttwo", "pix2@hotmail.com", "Rua test2 123", UserRole.USER,true, usuarioPartida2));
-        given(repository.findAllInStartedMatch()).willReturn(Set.of(usuario, usuario2));
+        given(repository.buscaTodosEmPartidaIniciada()).willReturn(Set.of(usuario, usuario2));
 
         Set<Usuario> players = service.buscaTodosEmPartidaIniciada();
 
         assertNotNull(players);
         assertEquals(2, players.size());
-        verify(repository, times(1)).findAllInStartedMatch();
+        verify(repository, times(1)).buscaTodosEmPartidaIniciada();
     }
-
-
-
-
-
-
-
-
-//    @Test
-//    @DisplayName("Atualizando usuário com sucesso")
-//    public void testUpdateUserSuccessfuly() {
-//        given(repository.findByUsername(anyString())).willReturn(Optional.empty());
-//        given(repository.save(usuario)).willReturn(usuario);
-//
-//        Usuario novoUsuario = service.inserirNovoUsuario(usuario);
-//        NovoUsuarioDTO novoUsuarioUpdatedDTO = new NovoUsuarioDTO(1,"User Test","userTestUpdated","123456","test@pix.com.br","Rua test 123",true,UserRole.USER,usuarioPartida);
-//        Usuario usuarioToBeUpdated = new Usuario(novoUsuarioUpdatedDTO);
-//        Usuario usuarioUpdated = service.atualizarUsuario(usuarioToBeUpdated);
-//
-//        assertEquals("userTestUpdated", usuarioUpdated.getUsername());
-//        assertNotNull(usuarioUpdated);
-//
-//        verify(repository, atLeast(2)).save(any(Usuario.class));
-//    }
-
-
-
-
-
-
-//    @Test
-//    @DisplayName("Criando novo usuário sem inserir senha cadastrada")
-//    public void testCreateNewUserWihNoPassword() {
-//        given(repository.findByUsername(anyString())).willReturn(Optional.empty());
-//        usuario.setPassword("");
-//        Usuario novoUsuario = service.inserirNovoUsuario(usuario);
-//        verify(repository, never()).save(any(Usuario.class));
-//    }
 }
