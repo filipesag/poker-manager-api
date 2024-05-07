@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import poker.manager.api.domain.Partida;
 import poker.manager.api.domain.Usuario;
 import poker.manager.api.domain.UsuarioPartida;
@@ -16,22 +15,14 @@ import poker.manager.api.dto.PartidaDTO;
 import poker.manager.api.dto.UsuarioDTO;
 import poker.manager.api.repository.PartidaRepository;
 import poker.manager.api.repository.UsuarioPartidaRepository;
-import poker.manager.api.repository.UsuarioRepository;
-import poker.manager.api.service.PartidaService;
 import poker.manager.api.service.UsuarioPartidaService;
 import poker.manager.api.service.exceptions.PartidaFullException;
-import poker.manager.api.service.exceptions.UsuarioAlreadyInMatchException;
-
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.client.ExpectedCount.times;
 
 
 @ExtendWith(MockitoExtension.class)

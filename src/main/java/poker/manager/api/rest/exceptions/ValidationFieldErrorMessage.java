@@ -2,7 +2,6 @@ package poker.manager.api.rest.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
-
 import java.util.Arrays;
 import java.util.List;
 
