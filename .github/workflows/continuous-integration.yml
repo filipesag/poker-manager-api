@@ -26,7 +26,7 @@ jobs:
         cache: maven
     - name: Build Application JAR
       working-directory: ./poker-manager-api
-      run: ./mvnw clean package
+      run: mvnw clean package
 
     - name: Docker Compose Build
       working-directory: ./poker-manager-api
