@@ -6,6 +6,7 @@ import org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl;
 import org.hibernate.boot.model.naming.PhysicalNamingStrategy;
 import org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -50,6 +51,14 @@ public class ApplicationConfig {
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(bCryptPasswordEncoder());
         return authProvider;
+    }
+
+    @Bean
+    public FlywayMigrationStrategy repairFlyway() {
+        return flyway -> {
+            flyway.repair();
+            flyway.migrate();
+        };
     }
 
     @Bean

@@ -40,7 +40,7 @@ public class UsuarioController {
 
     @GetMapping(value = "/find/all")
     public Page<UsuarioDTO> findAllEnabled(@PageableDefault(size = 10, sort = {"nome"}) Pageable pageable) {
-        Page<UsuarioDTO> listDto = usuarioService.findAll(pageable).map(UsuarioDTO::new);
+        Page<UsuarioDTO> listDto = usuarioService.buscaTodos(pageable).map(UsuarioDTO::new);
         return ResponseEntity.ok().body(listDto).getBody();
     }
 

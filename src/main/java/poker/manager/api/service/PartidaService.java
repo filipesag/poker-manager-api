@@ -16,10 +16,12 @@ import poker.manager.api.repository.PartidaRepository;
 import poker.manager.api.repository.UsuarioPartidaRepository;
 import poker.manager.api.repository.UsuarioRepository;
 import poker.manager.api.domain.Partida;
+import poker.manager.api.service.exceptions.PartidaStatusRepeatedException;
 import poker.manager.api.service.exceptions.PartidaUnableToUpdateException;
 import poker.manager.api.service.exceptions.PartidaWithNoHostException;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -29,8 +31,6 @@ public class PartidaService {
 
     @Autowired
     private PartidaRepository partidaRepository;
-    @Autowired
-    private UsuarioService usuarioService;
     @Autowired
     private UsuarioPartidaService usuarioPartidaService;
     @Autowired
@@ -54,6 +54,9 @@ public class PartidaService {
     }
 
     public void cadastrarAnfitriao(Partida partida) {
+        if(partida.getStatus() != PartidaStatus.AGUARDANDO_ANFITRIAO) {
+            throw new PartidaUnableToUpdateException();
+        }
         Partida partidaAtual = partidaRepository.getReferenceById(partida.getId());
         partidaAtual.setStatus(PartidaStatus.ABERTA);
         partidaAtual.setBucketPorPessoa(partida.getBucketPorPessoa());
@@ -77,7 +80,7 @@ public class PartidaService {
 
     public void cancelarPartida(Partida partida) {
         partida = partidaRepository.getReferenceById(partida.getId());
-        Set<UsuarioPartida> players = usuarioPartidaRepository.findAllPlayersByMatch(partida.getId());
+        Set<UsuarioPartida> players = usuarioPartidaRepository.buscaTodosJogadoresPorPartida(partida.getId());
         for(UsuarioPartida player:players){
             player.setCancelado(true);
             player.setAnfitriao(false);
@@ -89,10 +92,10 @@ public class PartidaService {
     }
 
     public Boolean isAnfitriaoDefinido() {
-        Partida partida  = partidaRepository.findByStatusAguardandoAnfitriao();
+        Partida partida  = partidaRepository.buscaPorStatusAguardandoAnfitriao();
         if(partida == null) {
             return true;
-        } else {
+        } else{
             return false;
         }
     }
@@ -101,12 +104,18 @@ public class PartidaService {
         if(!isAnfitriaoDefinido()) {
             throw new PartidaWithNoHostException();
         }
-        Partida partida = partidaRepository.findByStatusAberta();
-        return partida;
+        List<Partida> partida = partidaRepository.buscaPorStatusAberta();
+        if(partida.size() > 1) {
+            throw new PartidaStatusRepeatedException();
+        }
+        return partida.get(0);
     }
 
     public Partida buscaPorStatusIniciada() {
-        Partida partida = partidaRepository.findByStatusInciada();
+        Partida partida = partidaRepository.buscaPorStatusInciada();
+        if(partida == null) {
+            throw new PartidaStatusRepeatedException();
+        }
         return partida;
     }
 
@@ -133,7 +142,10 @@ public class PartidaService {
     }
 
     public Partida buscaPorStatusFinalizada() {
-        Partida partida = partidaRepository.findByStatusFinalizada();
+        Partida partida = partidaRepository.buscaPorStatusFinalizada();
+        if(partida == null) {
+            throw new PartidaStatusRepeatedException();
+        }
         return partida;
     }
 }

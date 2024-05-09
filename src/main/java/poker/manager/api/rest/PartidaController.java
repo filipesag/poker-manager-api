@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import poker.manager.api.domain.Usuario;
+import poker.manager.api.dto.NovaPartidaDTO;
 import poker.manager.api.dto.PartidaDTO;
 import poker.manager.api.service.PartidaService;
 import poker.manager.api.service.UsuarioPartidaService;
@@ -35,8 +36,9 @@ public class PartidaController {
 
 
     @PostMapping(value = "/creation")
-    public ResponseEntity<Partida> criarNovaPartida(@RequestBody @Valid PartidaDTO partidaDTO) {
+    public ResponseEntity<Partida> criarNovaPartida(@RequestBody @Valid NovaPartidaDTO partidaDTO) {
         Partida partida = new Partida(partidaDTO);
+        partida.setUsuarioAnfitriaoId(0);
         partida = partidaService.criarPartida(partida);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(partida.getId()).toUri();
         return ResponseEntity.created(uri).body(partida);

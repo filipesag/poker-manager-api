@@ -1,9 +1,6 @@
 package poker.manager.api.rest.exceptions;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.io.Serializable;
-import java.time.Instant;
 import java.time.ZonedDateTime;
 
 public class RestErrorMessage implements Serializable {

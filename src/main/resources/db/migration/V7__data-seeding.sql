@@ -35,5 +35,5 @@ INSERT INTO usuario (id, nome, username, password,
 
 
 INSERT INTO partida (id, usuarioAnfitriaoId, quantidadeJogadores, data, status) VALUES(1,
-    2, 5, '25/10/2023', 'ABERTA'
+    2, 5, '2023-09-12', 'ABERTA'
 );

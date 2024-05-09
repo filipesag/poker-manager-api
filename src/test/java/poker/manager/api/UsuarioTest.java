@@ -103,50 +103,12 @@ public class UsuarioTest {
     public void testFindAllInStartedMatchSuccessfuly() {
         Set<UsuarioPartida> usuarioPartida2 = new HashSet<>();
         Usuario usuario2 = new Usuario(new UsuarioDTO(2,"User Test Two", "usertesttwo", "pix2@hotmail.com", "Rua test2 123", UserRole.USER,true, usuarioPartida2));
-        given(repository.findAllInStartedMatch()).willReturn(Set.of(usuario, usuario2));
+        given(repository.buscaTodosEmPartidaIniciada()).willReturn(Set.of(usuario, usuario2));
 
         Set<Usuario> players = service.buscaTodosEmPartidaIniciada();
 
         assertNotNull(players);
         assertEquals(2, players.size());
-        verify(repository, times(1)).findAllInStartedMatch();
+        verify(repository, times(1)).buscaTodosEmPartidaIniciada();
     }
-
-
-
-
-
-
-
-
-//    @Test
-//    @DisplayName("Atualizando usuário com sucesso")
-//    public void testUpdateUserSuccessfuly() {
-//        given(repository.findByUsername(anyString())).willReturn(Optional.empty());
-//        given(repository.save(usuario)).willReturn(usuario);
-//
-//        Usuario novoUsuario = service.inserirNovoUsuario(usuario);
-//        NovoUsuarioDTO novoUsuarioUpdatedDTO = new NovoUsuarioDTO(1,"User Test","userTestUpdated","123456","test@pix.com.br","Rua test 123",true,UserRole.USER,usuarioPartida);
-//        Usuario usuarioToBeUpdated = new Usuario(novoUsuarioUpdatedDTO);
-//        Usuario usuarioUpdated = service.atualizarUsuario(usuarioToBeUpdated);
-//
-//        assertEquals("userTestUpdated", usuarioUpdated.getUsername());
-//        assertNotNull(usuarioUpdated);
-//
-//        verify(repository, atLeast(2)).save(any(Usuario.class));
-//    }
-
-
-
-
-
-
-//    @Test
-//    @DisplayName("Criando novo usuário sem inserir senha cadastrada")
-//    public void testCreateNewUserWihNoPassword() {
-//        given(repository.findByUsername(anyString())).willReturn(Optional.empty());
-//        usuario.setPassword("");
-//        Usuario novoUsuario = service.inserirNovoUsuario(usuario);
-//        verify(repository, never()).save(any(Usuario.class));
-//    }
 }

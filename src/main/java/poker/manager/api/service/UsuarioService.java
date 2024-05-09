@@ -60,11 +60,11 @@ public class UsuarioService {
     }
 
     public Set<Usuario> buscaTodosEmPartidaIniciada() {
-        Set<Usuario> users = usuarioRepository.findAllInStartedMatch();
+        Set<Usuario> users = usuarioRepository.buscaTodosEmPartidaIniciada();
         return users;
     }
 
-    public Page<Usuario> findAll(Pageable pageable) {
+    public Page<Usuario> buscaTodos(Pageable pageable) {
         return usuarioRepository.findAllByIsEnabledTrue(pageable);
     }
 

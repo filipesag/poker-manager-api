@@ -11,11 +11,11 @@ import java.util.Set;
 public interface UsuarioPartidaRepository extends JpaRepository<UsuarioPartida, Integer> {
 
     @Query(value = "SELECT * FROM usuario_partida u WHERE u.partida_id = ?1 and u.usuario_id = ?2", nativeQuery = true)
-    UsuarioPartida findByIdUsuarioAndIdPartida(Integer idPartida, Integer idUsuario);
+    UsuarioPartida buscaPorIdUsuarioAndIdPartida(Integer idPartida, Integer idUsuario);
 
     @Query(value = "SELECT * FROM usuario_partida u WHERE u.partida_id = ?1", nativeQuery = true)
-    Set<UsuarioPartida> findAllPlayersByMatch(Integer idPartida);
+    Set<UsuarioPartida> buscaTodosJogadoresPorPartida(Integer idPartida);
 
     @Query(value = "SELECT * FROM usuario_partida u WHERE u.partida_id = ?1", nativeQuery = true)
-    Set<UsuarioPartida> findByIdPartida(Integer idPartida);
+    Set<UsuarioPartida> buscaPorIdPartida(Integer idPartida);
 }
