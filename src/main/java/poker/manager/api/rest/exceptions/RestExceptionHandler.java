@@ -86,6 +86,20 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(badRequest).body(treatedResponse);
     }
 
+    @ExceptionHandler(PartidaStatusRepeatedException.class)
+    private ResponseEntity<RestErrorMessage> partidaStatusRepeatedExceptionHandler(PartidaStatusRepeatedException exception, HttpServletRequest request) {
+        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        String errorMsg = "BAD_REQUEST";
+        RestErrorMessage treatedResponse = new RestErrorMessage(
+                ZonedDateTime.now(ZoneId.of("Z")),
+                badRequest.value(),
+                errorMsg,
+                exception.getMessage(),
+                request.getRequestURI());
+        return ResponseEntity.status(badRequest).body(treatedResponse);
+    }
+
+
     @ExceptionHandler(Exception.class)
     private ResponseEntity<RestErrorMessage> secutiryExceptionHandler(Exception exception, HttpServletRequest request) {
         HttpStatus status = null;

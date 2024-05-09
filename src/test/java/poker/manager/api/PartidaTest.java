@@ -22,12 +22,14 @@ import poker.manager.api.service.UsuarioPartidaService;
 import poker.manager.api.service.exceptions.PartidaUnableToUpdateException;
 import poker.manager.api.service.exceptions.PartidaWithNoHostException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import static net.bytebuddy.matcher.ElementMatchers.any;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
-
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -78,11 +80,26 @@ public class PartidaTest {
         given(repository.getReferenceById(1)).willReturn(partida);
 
         partida.setUsuarioAnfitriaoId(1);
+        partida.setStatus(PartidaStatus.AGUARDANDO_ANFITRIAO);
         service.cadastrarAnfitriao(partida);
 
         assertNotNull(partida);
         assertEquals(1, partida.getUsuarioAnfitriaoId());
         assertEquals(PartidaStatus.ABERTA, partida.getStatus());
+    }
+
+    @Test
+    @DisplayName("Testando exceção lançada quando anfitrião é cadastrado em partida aberta com status diferente de agurdando anfitrião")
+    public void testHostInMatchCreatedFailedDueToMatchStatus() {
+        partida.setUsuarioAnfitriaoId(1);
+        partida.setStatus(PartidaStatus.FECHADA);
+
+        assertThrows(
+            PartidaUnableToUpdateException.class, () -> {
+                service.cadastrarAnfitriao(partida);
+            }
+        );
+        verify(repository, never()).save(partida);
     }
 
     @Test
@@ -152,7 +169,7 @@ public class PartidaTest {
     @DisplayName("Testando busca por partida com status ABERTA retornando-a")
     public void testFindingOpenedStatusMatchTrue() {
         partida.setStatus(PartidaStatus.ABERTA);
-        given(repository.buscaPorStatusAberta()).willReturn(partida);
+        given(repository.buscaPorStatusAberta()).willReturn(List.of(partida));
         given(repository.buscaPorStatusAguardandoAnfitriao()).willReturn(null);
         Partida openedMatch = service.buscarPorStatusAberta();
 

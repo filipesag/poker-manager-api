@@ -5,10 +5,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import poker.manager.api.domain.Partida;
 
+import java.util.List;
+
 @Repository
 public interface PartidaRepository extends JpaRepository<Partida, Integer> {
     @Query(value = "SELECT * FROM PARTIDA p WHERE p.status = 'ABERTA'", nativeQuery = true)
-    Partida buscaPorStatusAberta();
+    List<Partida> buscaPorStatusAberta();
 
     @Query(value = "SELECT * FROM PARTIDA p WHERE p.status = 'INICIADA'", nativeQuery = true)
     Partida buscaPorStatusInciada();

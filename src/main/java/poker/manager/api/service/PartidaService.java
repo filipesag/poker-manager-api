@@ -16,10 +16,12 @@ import poker.manager.api.repository.PartidaRepository;
 import poker.manager.api.repository.UsuarioPartidaRepository;
 import poker.manager.api.repository.UsuarioRepository;
 import poker.manager.api.domain.Partida;
+import poker.manager.api.service.exceptions.PartidaStatusRepeatedException;
 import poker.manager.api.service.exceptions.PartidaUnableToUpdateException;
 import poker.manager.api.service.exceptions.PartidaWithNoHostException;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -52,6 +54,9 @@ public class PartidaService {
     }
 
     public void cadastrarAnfitriao(Partida partida) {
+        if(partida.getStatus() != PartidaStatus.AGUARDANDO_ANFITRIAO) {
+            throw new PartidaUnableToUpdateException();
+        }
         Partida partidaAtual = partidaRepository.getReferenceById(partida.getId());
         partidaAtual.setStatus(PartidaStatus.ABERTA);
         partidaAtual.setBucketPorPessoa(partida.getBucketPorPessoa());
@@ -90,7 +95,7 @@ public class PartidaService {
         Partida partida  = partidaRepository.buscaPorStatusAguardandoAnfitriao();
         if(partida == null) {
             return true;
-        } else {
+        } else{
             return false;
         }
     }
@@ -99,12 +104,18 @@ public class PartidaService {
         if(!isAnfitriaoDefinido()) {
             throw new PartidaWithNoHostException();
         }
-        Partida partida = partidaRepository.buscaPorStatusAberta();
-        return partida;
+        List<Partida> partida = partidaRepository.buscaPorStatusAberta();
+        if(partida.size() > 1) {
+            throw new PartidaStatusRepeatedException();
+        }
+        return partida.get(0);
     }
 
     public Partida buscaPorStatusIniciada() {
         Partida partida = partidaRepository.buscaPorStatusInciada();
+        if(partida == null) {
+            throw new PartidaStatusRepeatedException();
+        }
         return partida;
     }
 
@@ -132,6 +143,9 @@ public class PartidaService {
 
     public Partida buscaPorStatusFinalizada() {
         Partida partida = partidaRepository.buscaPorStatusFinalizada();
+        if(partida == null) {
+            throw new PartidaStatusRepeatedException();
+        }
         return partida;
     }
 }

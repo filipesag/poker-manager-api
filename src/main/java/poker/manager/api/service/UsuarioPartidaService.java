@@ -7,11 +7,11 @@ import poker.manager.api.domain.Usuario;
 import poker.manager.api.domain.UsuarioPartida;
 import poker.manager.api.repository.PartidaRepository;
 import poker.manager.api.repository.UsuarioPartidaRepository;
-import poker.manager.api.repository.UsuarioRepository;
 import poker.manager.api.service.exceptions.PartidaFullException;
-import poker.manager.api.service.exceptions.PartidaWithNoHostException;
+import poker.manager.api.service.exceptions.PartidaStatusRepeatedException;
 import poker.manager.api.service.exceptions.UsuarioAlreadyInMatchException;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -29,6 +29,11 @@ public class UsuarioPartidaService {
         }
         if (isUsuarioJaConfirmado(partida, usuario)) {
             throw new UsuarioAlreadyInMatchException();
+        }
+        List<Partida> partidaReturned = partidaRepository.buscaPorStatusAberta();
+
+        if(partidaReturned.size() > 1) {
+            throw new PartidaStatusRepeatedException();
         }
 
         UsuarioPartida usuarioPartida = new UsuarioPartida(partida, usuario);
