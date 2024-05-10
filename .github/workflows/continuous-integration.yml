@@ -51,4 +51,4 @@ jobs:
           docker tag ${{ secrets.DOCKER_USERNAME }}/poker-manager-api-app:latest ${{ secrets.DOCKER_USERNAME }}/poker-manager-api-app:${{ github.run_id }}
           
           docker push ${{ secrets.DOCKER_USERNAME }}/poker-manager-api-app:${{ github.run_id }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/poker-manager-api-app:latest
+
