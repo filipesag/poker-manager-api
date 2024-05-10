@@ -5,12 +5,14 @@ services:
     ports:
       - "8080:8080"
     restart: always
-    depends_on:
-      - db
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://poker-db:5432/postgres
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: filipe.a
+    depends_on:
+      - db
+    networks:
+      - poker-network
   db:
     image: postgres
     restart: always
@@ -20,3 +22,9 @@ services:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: filipe.a
+    networks:
+      - poker-network
+networks:
+  poker-network:
+    driver: bridge
+
