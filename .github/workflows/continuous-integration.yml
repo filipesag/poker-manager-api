@@ -31,6 +31,13 @@ jobs:
       - name: Start PostgreSQL Container
         run: docker run -d --network poker-network --name postgres -e POSTGRES_DB=postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=${{ secrets.DOCKER_PASSWORD }} postgres
 
+      - name: Install Dockerize
+        run: |
+          wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz
+          tar -xzvf dockerize-linux-amd64-v0.6.1.tar.gz
+          sudo mv dockerize /usr/local/bin/dockerize
+          rm dockerize-linux-amd64-v0.6.1.tar.gz
+
       - name: Wait for PostgreSQL to be ready
         run: dockerize -wait tcp://db:5432 -timeout 60s
 
