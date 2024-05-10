@@ -28,6 +28,14 @@ jobs:
     - name: Build Application JAR
       run: ./mvnw clean package
 
+    - name: Unit Tests
+      run: mvn test
+
+    - name: Build Application JAR
+      run: |
+        mvn clean
+        mvn -B package --file pom.xml
+
     - name: Docker Compose Build
       working-directory: ./poker-manager-api
       run: docker compose build
