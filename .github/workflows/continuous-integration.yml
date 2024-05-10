@@ -24,8 +24,8 @@ jobs:
         java-version: '17'
         distribution: 'adopt'
         cache: maven
+
     - name: Build Application JAR
-      working-directory: ./poker-manager-api
       run: ./mvnw clean package
 
     - name: Docker Compose Build
