@@ -25,15 +25,14 @@ jobs:
           distribution: 'adopt'
           cache: maven
           
-      - name: Wait for database
-        run: |
-          dockerize -wait tcp://db:5432 -timeout 60s
+      - name: Start PostgreSQL Container
+        run: docker run -d --network poker-network --name postgres -e POSTGRES_DB=postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=${{ secrets.DOCKER_PASSWORD }} postgres
+
+      - name: Wait for PostgreSQL to be ready
+        run: dockerize -wait tcp://db:5432 -timeout 60s
 
       - name: Build Application JAR
         run: mvn clean package
-
-      - name: Unit Tests
-        run: mvn test
 
       - name: Build Docker Image
         run: |
