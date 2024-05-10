@@ -31,7 +31,13 @@ jobs:
         run: docker run -d --network poker-network --name postgres -e POSTGRES_DB=postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=${{ secrets.DOCKER_PASSWORD }} -p 5432:5432 postgres
 
       - name: Build Application JAR
-        run: mvn clean package
+        run: mvn clean package -DskipTests
+
+      - name: Unit Tests
+        run: |
+          mvn -Dtest=UsuarioTest test
+          mvn -Dtest=PartidaTest test
+          mvn -Dtest=UsuarioPartidaTest test
 
       - name: Build Docker Image
         run: |
