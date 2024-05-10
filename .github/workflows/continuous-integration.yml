@@ -44,7 +44,6 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/poker-manager-api-app:${{ github.run_id }} .
 
       - name: Docker Compose Build
-        working-directory: ./poker-manager-api
         run: docker-compose build
 
       - name: Push to Docker Container Registry
