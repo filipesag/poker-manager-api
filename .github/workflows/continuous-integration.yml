@@ -26,7 +26,7 @@ jobs:
         cache: maven
 
     - name: Build Application JAR
-      run: ./mvnw clean package
+      run: mvn clean package
 
     - name: Unit Tests
       run: mvn test
