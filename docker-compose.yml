@@ -1,4 +1,4 @@
-version: '3.8'
+version: '2.1'
 services:
   app:
     build: .
@@ -6,7 +6,7 @@ services:
       - "8080:8080"
     restart: always
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://172.20.0.2:5432/postgres
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: filipe.a
     depends_on:
@@ -27,4 +27,3 @@ services:
 networks:
   poker-network:
     driver: bridge
-
