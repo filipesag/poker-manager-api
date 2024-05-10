@@ -37,6 +37,10 @@ jobs:
           tar -xzvf dockerize-linux-amd64-v0.6.1.tar.gz
           sudo mv dockerize /usr/local/bin/dockerize
           rm dockerize-linux-amd64-v0.6.1.tar.gz
+          
+      - name: Set Up Hosts File
+        run: |
+          echo "127.0.0.1 db" | sudo tee -a /etc/hosts
 
       - name: Wait for PostgreSQL to be ready
         run: dockerize -wait tcp://db:5432 -timeout 60s
