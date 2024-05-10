@@ -65,7 +65,7 @@ public class PartidaTest {
         Partida partidaCreated = service.criarPartida(partida);
 
         assertNotNull(partidaCreated);
-        assertEquals("AGUARDANDO_ANFITRIAO", partidaCreated.getStatus().toString());
+        assertEquals("AGUARDANDO_ANFIRIAO", partidaCreated.getStatus().toString());
     }
 
     @Test
