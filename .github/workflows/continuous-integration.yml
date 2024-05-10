@@ -24,9 +24,13 @@ jobs:
         java-version: '17'
         distribution: 'adopt'
         cache: maven
+    - name: Unit Tests
+      run: mvn test 
     - name: Build Application JAR
       working-directory: ./poker-manager-api
-      run: mvn clean package
+      run: |
+        mvn clean
+        mvn -B package --file pom.xml
 
     - name: Docker Compose Build
       working-directory: ./poker-manager-api
