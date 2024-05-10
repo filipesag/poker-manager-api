@@ -24,6 +24,9 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
           cache: maven
+
+      - name: Docker Network Creation
+        run: docker network create poker-network || true
           
       - name: Start PostgreSQL Container
         run: docker run -d --network poker-network --name postgres -e POSTGRES_DB=postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=${{ secrets.DOCKER_PASSWORD }} postgres
