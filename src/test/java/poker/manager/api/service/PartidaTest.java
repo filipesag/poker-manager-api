@@ -1,4 +1,4 @@
-package poker.manager.api;
+package poker.manager.api.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,8 +14,6 @@ import poker.manager.api.dto.PartidaDTO;
 import poker.manager.api.repository.PartidaRepository;
 import poker.manager.api.repository.UsuarioPartidaRepository;
 import poker.manager.api.repository.UsuarioRepository;
-import poker.manager.api.service.PartidaService;
-import poker.manager.api.service.UsuarioPartidaService;
 import poker.manager.api.service.exceptions.PartidaUnableToUpdateException;
 import poker.manager.api.service.exceptions.PartidaWithNoHostException;
 import java.time.LocalDate;
