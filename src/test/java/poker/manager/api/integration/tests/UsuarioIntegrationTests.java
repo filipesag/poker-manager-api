@@ -65,11 +65,33 @@ public class UsuarioIntegrationTests extends AbstractIntegrationTest {
     }
 
     @Test
-    @DisplayName("Testanto Login efetuado com falha")
-    void testLoginFailed() {
+    @DisplayName("Testanto Login efetuado com falha por username errado")
+    void testLoginFailedWithWrongUsername() {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername("filipes");
         loginRequest.setPassword("filipe123");
+        LoginFailureResponse loginResponse = given().spec(specification)
+                .port(TestConfig.SERVER_PORT)
+                .body(loginRequest)
+                .when()
+                .post("/auth/authenticate")
+                .then()
+                .statusCode(403)
+                .extract().response().as(LoginFailureResponse.class);
+
+        assertThat(loginResponse.getTimeStamp(), matchesPattern("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?([Zz]|([\\+-])([01]\\d|2[0-3]):?([0-5]\\d)?)?"));
+        assertEquals(loginResponse.getStatus(), 403);
+        assertEquals(loginResponse.getError(), "FORBIDDEN");
+        assertEquals(loginResponse.getMessage(), "Ops! Credencial inválida. Por favor, verifique seu username e sua senha.");
+        assertEquals(loginResponse.getPath(), "/api/v1/auth/authenticate");
+    }
+
+    @Test
+    @DisplayName("Testanto Login efetuado com falha por senha errada")
+    void testLoginFailedWithWrongPassword() {
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("filipesag");
+        loginRequest.setPassword("filipe321");
         LoginFailureResponse loginResponse = given().spec(specification)
                 .port(TestConfig.SERVER_PORT)
                 .body(loginRequest)
