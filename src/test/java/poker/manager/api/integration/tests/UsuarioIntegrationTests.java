@@ -68,8 +68,8 @@ public class UsuarioIntegrationTests extends AbstractIntegrationTest {
     }
 
     @Test
-    @DisplayName("Testanto Login efetuado com falha")
-    void testLoginFailed() {
+    @DisplayName("Testanto Login efetuado com falha por username errado")
+    void testLoginFailedWithWrongUsername() {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername("filipes");
         loginRequest.setPassword("filipe123");
@@ -89,42 +89,25 @@ public class UsuarioIntegrationTests extends AbstractIntegrationTest {
         assertEquals(loginResponse.getPath(), "/api/v1/auth/authenticate");
     }
 
-    @Test
-    @DisplayName("Testanto adicionar novo usuario")
-    void testAddingNewUser() {
+    @DisplayName("Testanto Login efetuado com falha por senha errada")
+    void testLoginFailedWithWrongPassword() {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername("filipesag");
-        loginRequest.setPassword("filipe123");
-        String token = given().spec(specification)
+        loginRequest.setPassword("filipe321");
+        LoginFailureResponse loginResponse = given().spec(specification)
                 .port(TestConfig.SERVER_PORT)
                 .body(loginRequest)
                 .when()
                 .post("/auth/authenticate")
                 .then()
-                .statusCode(200)
-                .extract().response().as(LoginResponse.class).getToken();
-
-        UsuarioRequestResponse usuarioRequestResponse = new UsuarioRequestResponse();
-        usuarioRequestResponse.setNome("User For Tests");
-        usuarioRequestResponse.setUsername("user4Test");
-        usuarioRequestResponse.setPassword("user123test");
-        usuarioRequestResponse.setEndereco("Rua Test 0101, ap 01");
-        usuarioRequestResponse.setChavePix("31 9999900000");
-        usuarioRequestResponse.setRole("USER");
-        usuarioRequestResponse.setisEnabled(true);
-        usuarioRequestResponse.setPartidas(null);
-
-
-        UsuarioRequestResponse user = given().spec(specification)
-                .port(TestConfig.SERVER_PORT)
-                .header("Authorization", "Bearer " + token)
-                .body(usuarioRequestResponse)
-                .when()
-                .post("/users/new/player")
-                .then().statusCode(201).extract().response().as(UsuarioRequestResponse.class);
-
+                .statusCode(403)
+                .extract().response().as(LoginFailureResponse.class);
+        assertThat(loginResponse.getTimeStamp(), matchesPattern("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?([Zz]|([\\+-])([01]\\d|2[0-3]):?([0-5]\\d)?)?"));
+        assertEquals(loginResponse.getStatus(), 403);
+        assertEquals(loginResponse.getError(), "FORBIDDEN");
+        assertEquals(loginResponse.getMessage(), "Ops! Credencial inválida. Por favor, verifique seu username e sua senha.");
+        assertEquals(loginResponse.getPath(), "/api/v1/auth/authenticate");
     }
-
 }
 
 
