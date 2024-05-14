@@ -1,12 +1,13 @@
 package poker.manager.api.integration.pojo.usuario;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import poker.manager.api.domain.Partida;
 
 import java.util.Set;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UsuarioRequestResponse {
 
-   // Integer id;
+    Integer id;
     String nome;
 
     String username;
@@ -23,13 +24,21 @@ public class UsuarioRequestResponse {
 
     Set<Partida> partidas;
 
-//    public Integer getId() {
-//        return id;
-//    }
-//
-//    public void setId(Integer id) {
-//        this.id = id;
-//    }
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getNome() {
         return nome;
@@ -45,14 +54,6 @@ public class UsuarioRequestResponse {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getChavePix() {
