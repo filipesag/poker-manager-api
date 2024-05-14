@@ -6,7 +6,9 @@ import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.DeserializationFeature;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +17,7 @@ import poker.manager.api.integration.config.TestConfig;
 import poker.manager.api.integration.pojo.login.LoginFailureResponse;
 import poker.manager.api.integration.pojo.login.LoginRequest;
 import poker.manager.api.integration.pojo.login.LoginResponse;
+import poker.manager.api.integration.pojo.usuario.UsuarioRequestResponse;
 import poker.manager.api.integration.testcontainers.AbstractIntegrationTest;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -86,4 +89,42 @@ public class UsuarioIntegrationTests extends AbstractIntegrationTest {
         assertEquals(loginResponse.getPath(), "/api/v1/auth/authenticate");
     }
 
+    @Test
+    @DisplayName("Testanto adicionar novo usuario")
+    void testAddingNewUser() {
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("filipesag");
+        loginRequest.setPassword("filipe123");
+        String token = given().spec(specification)
+                .port(TestConfig.SERVER_PORT)
+                .body(loginRequest)
+                .when()
+                .post("/auth/authenticate")
+                .then()
+                .statusCode(200)
+                .extract().response().as(LoginResponse.class).getToken();
+
+        UsuarioRequestResponse usuarioRequestResponse = new UsuarioRequestResponse();
+        usuarioRequestResponse.setNome("User For Tests");
+        usuarioRequestResponse.setUsername("user4Test");
+        usuarioRequestResponse.setPassword("user123test");
+        usuarioRequestResponse.setEndereco("Rua Test 0101, ap 01");
+        usuarioRequestResponse.setChavePix("31 9999900000");
+        usuarioRequestResponse.setRole("USER");
+        usuarioRequestResponse.setisEnabled(true);
+        usuarioRequestResponse.setPartidas(null);
+
+
+        UsuarioRequestResponse user = given().spec(specification)
+                .port(TestConfig.SERVER_PORT)
+                .header("Authorization", "Bearer " + token)
+                .body(usuarioRequestResponse)
+                .when()
+                .post("/users/new/player")
+                .then().statusCode(201).extract().response().as(UsuarioRequestResponse.class);
+
+    }
+
 }
+
+
