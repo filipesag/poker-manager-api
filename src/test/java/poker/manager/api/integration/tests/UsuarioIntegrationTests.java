@@ -6,7 +6,9 @@ import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.DeserializationFeature;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +17,7 @@ import poker.manager.api.integration.config.TestConfig;
 import poker.manager.api.integration.pojo.login.LoginFailureResponse;
 import poker.manager.api.integration.pojo.login.LoginRequest;
 import poker.manager.api.integration.pojo.login.LoginResponse;
+import poker.manager.api.integration.pojo.usuario.UsuarioRequestResponse;
 import poker.manager.api.integration.testcontainers.AbstractIntegrationTest;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -86,7 +89,6 @@ public class UsuarioIntegrationTests extends AbstractIntegrationTest {
         assertEquals(loginResponse.getPath(), "/api/v1/auth/authenticate");
     }
 
-    @Test
     @DisplayName("Testanto Login efetuado com falha por senha errada")
     void testLoginFailedWithWrongPassword() {
         LoginRequest loginRequest = new LoginRequest();
@@ -100,12 +102,12 @@ public class UsuarioIntegrationTests extends AbstractIntegrationTest {
                 .then()
                 .statusCode(403)
                 .extract().response().as(LoginFailureResponse.class);
-
         assertThat(loginResponse.getTimeStamp(), matchesPattern("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?([Zz]|([\\+-])([01]\\d|2[0-3]):?([0-5]\\d)?)?"));
         assertEquals(loginResponse.getStatus(), 403);
         assertEquals(loginResponse.getError(), "FORBIDDEN");
         assertEquals(loginResponse.getMessage(), "Ops! Credencial inválida. Por favor, verifique seu username e sua senha.");
         assertEquals(loginResponse.getPath(), "/api/v1/auth/authenticate");
     }
-
 }
+
+

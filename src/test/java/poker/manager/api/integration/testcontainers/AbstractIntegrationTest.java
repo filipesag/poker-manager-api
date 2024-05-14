@@ -1,6 +1,5 @@
 package poker.manager.api.integration.testcontainers;
 
-import org.hibernate.sql.results.graph.Initializer;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
