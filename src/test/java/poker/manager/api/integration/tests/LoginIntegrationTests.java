@@ -28,7 +28,6 @@ public class LoginIntegrationTests extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
     private static ObjectMapper objectMapper;
-    private static Usuario usuario;
 
     @BeforeAll
     public static void setup() {
