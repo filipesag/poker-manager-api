@@ -40,8 +40,8 @@ jobs:
 
       - name: Integration Tests
         run: |
-          mvn -Dtest=UsuarioIntegrationTests test
           mvn -Dtest=LoginIntegrationTests test
+          mvn -Dtest=UsuarioIntegrationTests test
 
       - name: Build Docker Image
         run: |
