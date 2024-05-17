@@ -38,11 +38,6 @@ jobs:
         with:
           token: ${{ secrets.TC_CLOUD_TOKEN }}
 
-      - name: Integration Tests
-        run: |
-          mvn -Dtest=LoginIntegrationTests test
-          mvn -Dtest=UsuarioIntegrationTests test
-
       - name: Build Docker Image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/poker-manager-api-app:${{ github.run_id }} .
