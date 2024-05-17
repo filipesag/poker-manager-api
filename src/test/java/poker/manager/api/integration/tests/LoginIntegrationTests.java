@@ -25,26 +25,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ActiveProfiles("test")
 public class LoginIntegrationTests extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
     private static ObjectMapper objectMapper;
-    private static Usuario usuario;
 
     @BeforeAll
     public static void setup() {
-        objectMapper = new ObjectMapper();
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-
-        specification = new RequestSpecBuilder()
-                .setBaseUri("http://localhost")
-                .setContentType(ContentType.JSON)
-                .setBasePath("/api/v1")
-                .setPort(TestConfig.SERVER_PORT)
-                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
-                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-                .build();
+        specification = BaseTests.getRequestSpecification();
+        objectMapper = BaseTests.getObjectMapper();
     }
 
     @Test
