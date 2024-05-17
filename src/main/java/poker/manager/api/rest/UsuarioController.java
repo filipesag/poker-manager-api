@@ -65,6 +65,7 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
+
     @PutMapping(value = "/set/closed-match")
     public ResponseEntity<UsuarioPartida> inserirDadosPartidaFechada(@RequestBody UsuarioDTO usuarioDTO) {
         Usuario usuario = new Usuario(usuarioDTO);

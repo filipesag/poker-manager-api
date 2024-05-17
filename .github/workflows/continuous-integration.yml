@@ -33,6 +33,11 @@ jobs:
           mvn -Dtest=PartidaTest test
           mvn -Dtest=UsuarioPartidaTest test
 
+      - name: Setup Testcontainers Cloud Client
+        uses: atomicjar/testcontainers-cloud-setup-action@v1
+        with:
+          token: ${{ secrets.TC_CLOUD_TOKEN }}
+
       - name: Build Docker Image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/poker-manager-api-app:${{ github.run_id }} .

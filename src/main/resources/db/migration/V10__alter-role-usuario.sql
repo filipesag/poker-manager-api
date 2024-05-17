@@ -1,17 +1,17 @@
 UPDATE usuario SET role = 'ADMIN'
-WHERE id = 1;
+WHERE id = -1;
 
 UPDATE usuario SET role = 'ADMIN'
-WHERE id = 2;
+WHERE id = -2;
 
 UPDATE usuario SET role = 'ADMIN'
-WHERE id = 3;
+WHERE id = -3;
 
 UPDATE usuario SET role = 'USER'
-WHERE id = 4;
+WHERE id = -4;
 
 UPDATE usuario SET role = 'USER'
-WHERE id = 5;
+WHERE id = -5;
 
 UPDATE usuario SET role = 'USER'
-WHERE id = 6;
+WHERE id = -6;
